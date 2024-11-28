@@ -1,0 +1,137 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.auth_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.auth_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 350px;
+}
+
+.auth_title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.auth_inputGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.auth_label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.auth_input, .auth_select {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.auth_input:focus, .auth_select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+
+.auth_linkButton {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: opacity 0.3s;
+}
+
+.auth_linkButton:hover {
+    opacity: 0.8;
+}
+
+
+.auth_rememberMeAndForgotPassword {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.auth_checkboxLabel {
+    font-size: 14px;
+    color: #666;
+    margin-right: 10px;
+}
+
+.auth_checkbox {
+    margin-right: 5px;
+}
+
+.auth_linkButton {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: opacity 0.3s;
+}
+
+.auth_linkButton:hover {
+    opacity: 0.8;
+}
+
+.auth_button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.auth_button:hover {
+    background-color: #0056b3;
+}
+
+
+.auth_resend-text {
+    font-size: 14px;
+    color: #666;
+    margin-right: 10px;
+}
+
+

@@ -1,0 +1,287 @@
+/* Общие стили */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-size: 16px;
+}
+
+/* Контейнеры */
+.home_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+/* Основной контент */
+.home_content {
+    margin-top: 630px;
+    padding: 20px;
+}
+
+/* Поиск */
+.home_search {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home_search h2 {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.home_search p {
+    font-size: 18px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+
+/* Категории */
+.home_categories,
+.home_students,
+.home_universities,
+.home_companies{
+    padding: 20px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home_categories h2,
+.home_students h2,
+.home_universities h2,
+.home_companies h2{
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.home_category_grid,
+.home_student_grid,
+.home_university_grid,
+.home_company_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.home_category_item,
+.home_student_item,
+.home_university_item,
+.home_company_item{
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.home_category_item:hover,
+.home_university_item:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-5px);
+}
+
+/* Респонсивность */
+@media (max-width: 1024px) {
+    body {
+        font-size: 14px;
+    }
+    .home_content {
+        margin-top: 200px; /* Уменьшаем отступы для планшетов */
+    }
+    .home_category_grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Больше колонок на планшетах */
+    }
+}
+
+@media (max-width: 768px) {
+    .home_content {
+        padding: 10px;
+    }
+    .header_nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .header_auth {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .home_category_grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    .header_profile_modal {
+        width: 90%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Хедер */
+.common_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px 20px;
+    z-index: 10;
+}
+
+.header_logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.header_nav {
+    display: flex;
+    gap: 15px;
+}
+
+.header_nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.header_nav a:hover {
+    color: #007bff;
+}
+
+.header_nav a.active {
+    color: #007bff;
+}
+
+.header_auth {
+    display: flex;
+    gap: 10px;
+}
+
+.header_auth button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header_sign_in {
+    background-color: transparent;
+    color: #007bff;
+    border: 5px solid black;
+}
+
+.header_sign_in:hover{
+    opacity: 0.8;
+}
+
+
+/* Профиль */
+.header_profile_icon {
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.header_profile_icon:hover {
+    transform: scale(1.1);
+}
+
+
+/* Стили модального окна */
+.header_profile_modal {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    padding: 15px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header_profile_modal_button,
+.header_profile_modal_logout_button {
+    width: 100%;
+    color: #007bff;
+    background-color: transparent;
+    border: 1px solid #007bff;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.header_profile_modal_logout_button {
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+}
+
+.header_profile_modal_button:hover,
+.header_profile_modal_logout_button:hover {
+    opacity: 0.8;
+}
+
+
+
+
+
