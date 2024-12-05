@@ -11,6 +11,7 @@ const StudentProfile = () => {
 
 
     const [profile, setProfile] = useState({
+        ownerId: "",
         firstName: "",
         lastName: "",
         email: "",
@@ -23,9 +24,15 @@ const StudentProfile = () => {
     });
 
     const [isEditing, setIsEditing] = useState(false);
-
+    //?
     useEffect(() => {
-        fetch(`${baseUrl}/student/${decodedToken['id']}`)
+        fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
             .then((response) => response.json())
             .then((data) => setProfile(data))
             .catch((error) => console.error("Error fetching profile data:", error));
@@ -40,9 +47,12 @@ const StudentProfile = () => {
     };
 
     const handleSave = () => {
-        fetch(`${baseUrl}/student/${decodedToken['id']}`, { //здесь эндпоинт /student/update
+        fetch(`${baseUrl}/student/${decodedToken['user-id']}`, { //здесь эндпоинт /student/update
             method: "PUT",
-            headers: { "Content-Type": "application/json" },//token
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },//token
             body: JSON.stringify(profile),
         })
             .then((response) => {
@@ -95,16 +105,6 @@ const StudentProfile = () => {
                     name="phoneNumber"
                     placeholder="Phone Number"
                     value={profile.phoneNumber}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    name="universityId"
-                    placeholder="University Id"
-                    value={profile.universityId}
                     onChange={handleChange}
                     disabled={!isEditing}
                 />

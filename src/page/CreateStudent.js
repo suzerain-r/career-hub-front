@@ -13,8 +13,8 @@ const CreateStudent = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const baseUrl = "http://localhost:8080";
-        const url = `${baseUrl}/auth/registration`;
+        const baseUrl = "http://localhost:8080/auth";
+        const url = `${baseUrl}/student/registration`;
 
         const token = localStorage.getItem("authToken");
 

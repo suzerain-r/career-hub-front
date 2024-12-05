@@ -10,6 +10,7 @@ const UniversityProfile = () => {
     const token = localStorage.getItem("authToken");
     const decodedToken = jwtDecode(token);
     const [profile, setProfile] = useState({
+        ownerId: "",
         name: "",
         type: "PRIVATE",
         email: "",
@@ -21,8 +22,15 @@ const UniversityProfile = () => {
 
     const [isEditing, setIsEditing] = useState(false);
 
+    //??
     useEffect(() => {
-        fetch(`${baseUrl}/university/${decodedToken['id']}`)
+        fetch(`${baseUrl}/university/${decodedToken['user-id']}`,{
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
             .then((response) => response.json())
             .then((data) => setProfile(data))
             .catch((error) => console.error("Error fetching profile data:", error));
@@ -37,9 +45,12 @@ const UniversityProfile = () => {
     };
 
     const handleSave = () => {
-        fetch(`${baseUrl}/university/update/${decodedToken['id']}`, {
+        fetch(`${baseUrl}/university/update/${decodedToken['user-id']}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },//token нужно в header
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },//token нужно в header
             body: JSON.stringify(profile),
         })
             .then((response) => {

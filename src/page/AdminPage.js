@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../style/admin_style.css';
 
 const AdminPage = () => {
-    const [role, setRole] = useState('university');
+    const [role, setRole] = useState('University');
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -12,13 +12,25 @@ const AdminPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const baseUrl = "http://localhost:8080";
-        const url = `${baseUrl}/auth/registration`;
+        const token = localStorage.getItem("authToken");
+
+        const baseUrl = "http://localhost:8080/auth";
+        let url = '';
+
+        switch (role) {
+            case 'University':
+                url = `${baseUrl}/university/registration`;
+                break;
+            case 'Company':
+                url = `${baseUrl}/company/registration`;
+                break;
+        }
 
         try {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({

@@ -9,8 +9,10 @@ const CompanyProfile = () => {
     const decodedToken = jwtDecode(token);
 
     const [profile, setProfile] = useState({
+        ownerId: "",
         name: "",
         type: "PRIVATE",
+        email: "",
         location: "",
         contactPhone: "",
         industry: "",
@@ -19,9 +21,15 @@ const CompanyProfile = () => {
     });
 
     const [isEditing, setIsEditing] = useState(false);
-
+    //?
     useEffect(() => {
-        fetch(`${baseUrl}/company/${decodedToken['id']}`)
+        fetch(`${baseUrl}/company/${decodedToken['user-id']}`,{
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
             .then((response) => response.json())
             .then((data) => setProfile(data))
             .catch((error) => console.error("Error fetching profile data:", error));
@@ -36,9 +44,12 @@ const CompanyProfile = () => {
     };
 
     const handleSave = () => {
-        fetch(`${baseUrl}/company/update/${decodedToken['id']}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }, //token
+        fetch(`${baseUrl}/company/update/${decodedToken['user-id']}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }, //token
             body: JSON.stringify(profile),
         })
             .then((response) => {
@@ -75,6 +86,16 @@ const CompanyProfile = () => {
                     <option value="PRIVATE">Private</option>
                     <option value="STATE">State</option>
                 </select>
+            </div>
+            <div>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    value={profile.email}
+                    onChange={handleChange}
+                    disabled
+                />
             </div>
             <div>
                 <input

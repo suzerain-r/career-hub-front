@@ -91,6 +91,13 @@ const Header = () => {
                                         <button onClick={handleLogoutClick} className="header_profile_modal_logout_button">Log Out</button>
                                     </>
                                 )}
+                                {userRole === "ADMIN" && (
+                                    <>
+                                        <button onClick={handleLogoutClick}
+                                                className="header_profile_modal_logout_button">Log Out
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>
