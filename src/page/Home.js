@@ -1,5 +1,8 @@
 import '../style/home_style.css';
 import { useNavigate } from "react-router-dom";
+import howWorkInfo from '../resources/how-work-info.svg';
+import mainInfo from '../resources/main-info.svg';
+import universityIcon from '../resources/university-icon.svg';
 import Header from "./Header";
 
 const Home = () => {
@@ -24,12 +27,42 @@ const Home = () => {
     ];
 
     const universities = [
-        "SDU University",
-        "SDU University",
-        "SDU University",
-        "SDU University",
-        "SDU University",
-        "SDU University",
+        {
+            name: "SDU university",
+            location: "Almaty",
+            rating: 4.9,
+            logo: "sdu-logo.svg",
+        },
+        {
+            name: "KBTU",
+            location: "Almaty",
+            rating: 4.8,
+            logo: "kbtu-logo.svg",
+        },
+        {
+            name: "AITU",
+            location: "Astana",
+            rating: 4.7,
+            logo: "aitu-logo.svg",
+        },
+        {
+            name: "IITU",
+            location: "Almaty",
+            rating: 4.7,
+            logo: "iitu-logo.svg",
+        },
+        {
+            name: "AITU",
+            location: "Astana",
+            rating: 4.7,
+            logo: "aitu-logo.svg",
+        },
+        {
+            name: "IITU",
+            location: "Almaty",
+            rating: 4.7,
+            logo: "iitu-logo.svg",
+        },
     ];
 
     const companies = [
@@ -46,29 +79,14 @@ const Home = () => {
             <Header/>
             <main className="home_content">
                 <section className="home_search">
-                    <h2>Find a worker who suits your interests & requirements.</h2>
-                    <p>Look for employees to grow your companies among the best students.</p>
-                </section>
-
-                <section className="home_categories">
-                    <h2>Popular Categories</h2>
-                    <div className="home_category_grid">
-                        {categories.map((category, index) => (
-                            <div key={index} className="home_category_item">
-                                {category}
-                            </div>
-                        ))}
+                    <div className="steps-container">
+                        <img src={mainInfo} className="mainInfo"></img>
                     </div>
                 </section>
 
-                <section className="home_students">
-                    <h2>Top Students</h2>
-                    <div className="home_student_grid">
-                        {students.map((student, index) => (
-                            <div key={index} className="home_student_item">
-                                {student}
-                            </div>
-                        ))}
+                <section className="how-work-section">
+                    <div className="steps-container">
+                        <img src={howWorkInfo} className="howWorkInfo"></img>
                     </div>
                 </section>
 
@@ -77,18 +95,23 @@ const Home = () => {
                     <div className="home_university_grid">
                         {universities.map((university, index) => (
                             <div key={index} className="home_university_item">
-                                {university}
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                <section className="home_companies">
-                    <h2>Top Companies</h2>
-                    <div className="home_company_grid">
-                        {companies.map((company, index) => (
-                            <div key={index} className="home_company_item">
-                                {company}
+                                <div className="item_container">
+                                    <img
+                                        src={universityIcon}
+                                        alt={`${university.name} Logo`}
+                                        className="university_logo"
+                                    />
+                                    <div className="location_container">
+                                        <h3>{university.name}</h3>
+                                        <p className="university_location">
+                                            <i className="location_icon"></i>
+                                            <span className="location_name">{university.location}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <button className="profile_button">
+                                    <span className="profile_button_text">Open Profile</span>
+                                </button>
                             </div>
                         ))}
                     </div>

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../style/home_style.css';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as ProfileIcon } from '../resources/profile.svg';
+import logo from '../resources/logo.svg';
 import {jwtDecode} from "jwt-decode";
 
 const Header = () => {
@@ -63,7 +64,10 @@ const Header = () => {
 
     return (
         <header className="common_header">
-            <div className="header_logo">CareerHub</div>
+            <div className="header_logo_container">
+                <img src={logo} className="header_logo"></img>
+                <div className="header_logo_text">CareerHub</div>
+            </div>
             <nav className="header_nav">
                 <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Home</Link>
                 <Link to="/candidates" className={location.pathname === '/candidates' ? 'active' : ''}>Candidates</Link>
