@@ -14,9 +14,19 @@ body {
 .header {
     display: flex;
     justify-content: left;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px 20px;
+    z-index: 10;
 }
 
 .logo_container {
+    display: flex;
     margin-left: 200px;
 }
 
