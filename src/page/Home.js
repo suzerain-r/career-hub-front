@@ -1,80 +1,124 @@
 import '../style/home_style.css';
-import { useNavigate } from "react-router-dom";
 import howWorkInfo from '../resources/how-work-info.svg';
 import mainInfo from '../resources/main-info.svg';
 import universityIcon from '../resources/university-icon.svg';
 import companyIcon from '../resources/company-icon.svg';
 import candidateIcon from '../resources/candidate-icon.svg';
 import Header from "./Header";
+import {useEffect, useState} from "react";
 
 const Home = () => {
 
+    const baseUrl = "http://localhost:8080";
 
-    const categories = [
-        "Code & Programming",
-        "Design & Art",
-        "Data Science",
-        "Marketing",
-        "Business Development",
-        "Engineering",
-    ];
+    const token = localStorage.getItem("authToken");
 
-    const students = [
-        "Student",
-        "Student",
-        "Student",
-        "Student",
-        "Student",
-        "Student",
-    ];
+    const [countStudents, setCountStudents] = useState('');
+    const [countUniversities, setCountUniversities] = useState('');
+    const [countCompanies, setCountCompanies] = useState('');
 
-    const universities = [
-        {
-            name: "SDU university",
-            location: "Almaty",
-            rating: 4.9,
-            logo: "sdu-logo.svg",
-        },
-        {
-            name: "KBTU",
-            location: "Almaty",
-            rating: 4.8,
-            logo: "kbtu-logo.svg",
-        },
-        {
-            name: "AITU",
-            location: "Astana",
-            rating: 4.7,
-            logo: "aitu-logo.svg",
-        },
-        {
-            name: "IITU",
-            location: "Almaty",
-            rating: 4.7,
-            logo: "iitu-logo.svg",
-        },
-        {
-            name: "AITU",
-            location: "Astana",
-            rating: 4.7,
-            logo: "aitu-logo.svg",
-        },
-        {
-            name: "IITU",
-            location: "Almaty",
-            rating: 4.7,
-            logo: "iitu-logo.svg",
-        },
-    ];
+    const [universities, setUniversities] = useState([]);
 
-    const companies = [
-        "Kaspi",
-        "Kaspi",
-        "Kaspi",
-        "Kaspi",
-        "Kaspi",
-        "Kaspi",
-    ];
+
+    const handleCount =  () => {
+
+        fetch(`${baseUrl}/student/search`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setCountStudents(data['totalElements'])
+            })
+            .catch((error) => console.error("Error fetching students:", error));
+
+
+        fetch(`${baseUrl}/company/search`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setCountCompanies(data['totalElements'])
+            })
+            .catch((error) => console.error("Error fetching companies:", error));
+    }
+
+    const handleUniversities = () => {
+        fetch(`${baseUrl}/university/search?size=6`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setUniversities(data['content']);
+                setCountUniversities(data['totalElements'])
+            })
+            .catch((error) => {
+                console.error("Error fetching universities:", error);
+            });
+    }
+
+    useEffect(() => {
+        handleCount();
+        handleUniversities();
+    })
+
+
+
+
+
+
+    // const universities = [
+    //     {
+    //         name: "SDU university",
+    //         location: "Almaty",
+    //         rating: 4.9,
+    //         logo: "sdu-logo.svg",
+    //     },
+    //     {
+    //         name: "KBTU",
+    //         location: "Almaty",
+    //         rating: 4.8,
+    //         logo: "kbtu-logo.svg",
+    //     },
+    //     {
+    //         name: "AITU",
+    //         location: "Astana",
+    //         rating: 4.7,
+    //         logo: "aitu-logo.svg",
+    //     },
+    //     {
+    //         name: "IITU",
+    //         location: "Almaty",
+    //         rating: 4.7,
+    //         logo: "iitu-logo.svg",
+    //     },
+    //     {
+    //         name: "AITU",
+    //         location: "Astana",
+    //         rating: 4.7,
+    //         logo: "aitu-logo.svg",
+    //     },
+    //     {
+    //         name: "IITU",
+    //         location: "Almaty",
+    //         rating: 4.7,
+    //         logo: "iitu-logo.svg",
+    //     },
+    // ];
+
+
+
 
     return (
         <div className="home_container">
@@ -91,7 +135,7 @@ const Home = () => {
                                 className="company_logo"
                             />
                             <div className="count_info">
-                                <h2>97,354</h2>
+                                <h2>{countStudents}</h2>
                                 <p>Companies</p>
                             </div>
                         </div>
@@ -102,7 +146,7 @@ const Home = () => {
                                 className="university_logo"
                             />
                             <div className="count_info">
-                                <h2>7,532</h2>
+                                <h2>{countUniversities}</h2>
                                 <p>Universities</p>
                             </div>
                         </div>
@@ -113,7 +157,7 @@ const Home = () => {
                                 className="candidate_logo"
                             />
                             <div className="count_info">
-                                <h2>38,47,154</h2>
+                                <h2>{countCompanies}</h2>
                                 <p>Candidates</p>
                             </div>
                         </div>

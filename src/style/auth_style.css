@@ -1,43 +1,86 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
+    background-color: white !important;
 }
 
 .auth_container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: white;
+}
+
+.header {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
     width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px 20px;
+    z-index: 10;
+}
+
+.logo_container {
+    display: flex;
+    margin-left: 120px;
+}
+
+
+.main_container {
+    margin-top: 50px;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+
+.fon_image_container {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.fonImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .auth_form {
+    width: 50%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 30px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+    padding: 0 150px;
     border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    width: 350px;
+}
+
+.select_container {
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 .auth_title {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: normal;
     color: #333;
     margin-bottom: 20px;
+    width: 100%;
+    padding: 0;
 }
 
 .auth_inputGroup {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    align-items: center;
+    width: 100%; /* Сохраняем текущую ширину */
+    margin-bottom: 10px;
 }
 
 .auth_label {
@@ -46,19 +89,31 @@ body {
     margin-bottom: 5px;
 }
 
-.auth_input, .auth_select {
+.auth_input {
     padding: 12px;
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 5px;
     transition: border-color 0.3s;
+    width: 100%;
+    max-width: 500px;
 }
 
-.auth_input:focus, .auth_select:focus {
-    border-color: #007bff;
-    outline: none;
+
+.auth_select,
+.auth_input {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
 }
 
+.auth_select {
+    margin-left: 20px;
+    width: calc(100% - 20px);
+}
 
 .auth_linkButton {
     background: none;
@@ -94,22 +149,11 @@ body {
     margin-right: 5px;
 }
 
-.auth_linkButton {
-    background: none;
-    border: none;
-    color: #007bff;
-    font-size: 14px;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: opacity 0.3s;
-}
 
-.auth_linkButton:hover {
-    opacity: 0.8;
-}
 
 .auth_button {
     width: 100%;
+    max-width: 500px;
     padding: 12px;
     font-size: 16px;
     background-color: #007bff;

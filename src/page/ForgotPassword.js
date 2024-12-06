@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../style/auth_style.css';
 import { useNavigate } from "react-router-dom";
+import logo from "../resources/logo.svg";
+import fonImage from "../resources/auth-fon-image.png";
 
 const ForgotPassword = () => {
 
@@ -59,49 +61,65 @@ const ForgotPassword = () => {
 
     return (
         <div className="auth_container">
-            <form className="auth_form">
-                <h2 className="auth_title">Forgot Password</h2>
-                <div className="auth_inputGroup">
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="Email"
-                        className="auth_input"
-                    />
+            <header className="header">
+                <div className="logo_container">
+                    <img src={logo} className="header_logo"></img>
+                    <div className="header_logo_text">CareerHub</div>
                 </div>
-                <button onClick={handleForgotPassword} className="auth_button">
-                    Reset Password
-                </button>
+            </header>
+            <main className="main_container">
 
-                <div className="auth_inputGroup">
-                    <input
-                        type="text"
-                        value={code}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="Confirmation Code"
-                        className="auth_input"
-                    />
-                </div>
-                <button onClick={handleVerifyCode} className="auth_button">
-                    Verify Code
-                </button>
-
-                <p className="auth_resend-text">
-                    Didn’t receive any code?{''}
-                    <button
-                        onClick={handleForgotPassword}
-                        type="button"
-                        className="auth_linkButton"
-                    >
-                        Resend
+                <form className="auth_form">
+                    <h2 className="auth_title">Forgot Password</h2>
+                    <div className="auth_inputGroup">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="Email"
+                            className="auth_input"
+                        />
+                    </div>
+                    <button onClick={handleForgotPassword} className="auth_button">
+                        Reset Password
                     </button>
-                </p>
+
+                    <div className="auth_inputGroup">
+                        <input
+                            type="text"
+                            value={code}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="Confirmation Code"
+                            className="auth_input"
+                        />
+                    </div>
+                    <button onClick={handleVerifyCode} className="auth_button">
+                        Verify Code
+                    </button>
+
+                    <p className="auth_resend-text">
+                        Didn’t receive any code?{''}
+                        <button
+                            onClick={handleForgotPassword}
+                            type="button"
+                            className="auth_linkButton"
+                        >
+                            Resend
+                        </button>
+                    </p>
 
 
-            </form>
+                </form>
+
+                <div className="fon_image_container">
+                    <img
+                        src={fonImage}
+                        className="fonImage"
+                    />
+                </div>
+            </main>
 
         </div>
     );

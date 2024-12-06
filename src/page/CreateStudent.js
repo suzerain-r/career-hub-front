@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import '../style/create_student_style.css';
+import '../style/auth_style.css';
+import logo from "../resources/logo.svg";
+import fonImage from "../resources/auth-fon-image.png";
 
 const CreateStudent = () => {
 
@@ -46,43 +48,57 @@ const CreateStudent = () => {
     };
 
     return (
-        <div className="create-student-page">
-            <form onSubmit={handleSubmit} className="create-student-form">
-                <h2>Create Student</h2>
+        <div className="auth_container">
+            <header className="header">
+                <div className="logo_container">
+                    <img src={logo} className="header_logo"></img>
+                    <div className="header_logo_text">CareerHub</div>
+                </div>
+            </header>
+            <main className="main_container">
+                <form onSubmit={handleSubmit} className="auth_form">
+                    <h2 className="auth_title">Create Student</h2>
 
-                <div className="create-student_inputGroup">
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                        placeholder="Username"
-                        className="create-student_input"
-                    />
-                </div>
-                <div className="create-student_inputGroup">
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="Email"
-                        className="create-student_input"
-                    />
-                </div>
-                <div className="create-student_inputGroup">
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        placeholder="Password"
-                        className="create-student_input"
-                    />
-                </div>
+                    <div className="auth_inputGroup">
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            placeholder="Username"
+                            className="auth_input"
+                        />
+                    </div>
+                    <div className="auth_inputGroup">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="Email"
+                            className="auth_input"
+                        />
+                    </div>
+                    <div className="auth_inputGroup">
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            placeholder="Password"
+                            className="auth_input"
+                        />
+                    </div>
 
-                <button type="submit">Create Student</button>
-            </form>
+                    <button type="submit" className="auth_button">Create Student ➜</button>
+                </form>
+                <div className="fon_image_container">
+                    <img
+                        src={fonImage}
+                        className="fonImage"
+                    />
+                </div>
+            </main>
         </div>
 
     );

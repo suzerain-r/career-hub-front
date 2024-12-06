@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import '../style/auth_style.css';
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from "jwt-decode";
+import logo from "../resources/logo.svg";
+import fonImage from '../resources/auth-fon-image.png';
 
 const SignIn = () => {
     const [username, setUsername] = useState('');
@@ -53,48 +55,63 @@ const SignIn = () => {
 
     return (
         <div className="auth_container">
-            <form onSubmit={handleLogin} className="auth_form">
-                <h2 className="auth_title">Login</h2>
-                <div className="auth_inputGroup">
-                    <input
-                        type="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                        placeholder="Username"
-                        className="auth_input"
-                    />
+            <header className="header">
+                <div className="logo_container">
+                    <img src={logo} className="header_logo"></img>
+                    <div className="header_logo_text">CareerHub</div>
                 </div>
-                <div className="auth_inputGroup">
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        placeholder="Password"
-                        className="auth_input"
-                    />
-                </div>
-
-                <div className="auth_rememberMeAndForgotPassword">
-                    <label className="auth_checkboxLabel">
+            </header>
+            <main className="main_container">
+                <form onSubmit={handleLogin} className="auth_form">
+                    <h2 className="auth_title">Sign In</h2>
+                    <div className="auth_inputGroup">
                         <input
-                            type="checkbox"
-                            checked={rememberMe}
-                            onChange={() => setRememberMe(!rememberMe)}
-                            className="auth_checkbox"
+                            type="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            placeholder="Username"
+                            className="auth_input"
                         />
-                        Remember me
-                    </label>
-                    <button type="button" className="auth_linkButton">
-                        Forgot password?
-                    </button>
-                </div>
-                <button type="submit" className="auth_button">Sign In</button>
+                    </div>
+                    <div className="auth_inputGroup">
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            placeholder="Password"
+                            className="auth_input"
+                        />
+                    </div>
 
-            </form>
+                    <div className="auth_rememberMeAndForgotPassword">
+                        <label className="auth_checkboxLabel">
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={() => setRememberMe(!rememberMe)}
+                                className="auth_checkbox"
+                            />
+                            Remember me
+                        </label>
+                        <button type="button" className="auth_linkButton">
+                            Forgot password?
+                        </button>
+                    </div>
+                    <button type="submit" className="auth_button">Sign In</button>
+
+                </form>
+
+                <div className="fon_image_container">
+                    <img
+                        src={fonImage}
+                        className="fonImage"
+                    />
+                </div>
+            </main>
         </div>
-    );
+    )
 };
 
 export default SignIn;

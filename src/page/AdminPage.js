@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../style/admin_style.css';
+import '../style/auth_style.css';
 import logo from '../resources/logo.svg';
 import fonImage from '../resources/auth-fon-image.png';
 
@@ -19,12 +19,15 @@ const AdminPage = () => {
         const baseUrl = "http://localhost:8080/auth";
         let url = '';
 
+        console.log(role);
+
         switch (role) {
-            case 'University':
+            case 'university':
                 url = `${baseUrl}/university/registration`;
                 break;
-            case 'Company':
+            case 'company':
                 url = `${baseUrl}/company/registration`;
+                console.log(url);
                 break;
         }
 
@@ -56,7 +59,7 @@ const AdminPage = () => {
     };
 
     return (
-        <div className="admin-page">
+        <div className="auth_container">
             <header className="header">
                 <div className="logo_container">
                     <img src={logo} className="header_logo"></img>
@@ -65,20 +68,20 @@ const AdminPage = () => {
             </header>
 
             <main className="main_container">
-                <form onSubmit={handleSubmit} className="admin-form">
+                <form onSubmit={handleSubmit} className="auth_form">
                     <div className="select_container">
-                        <h2>Create {role.charAt(0).toUpperCase() + role.slice(1)}</h2>
+                        <h2 className="auth_title">Create account.</h2>
                         <div className="auth_inputGroup">
                             <select value={role}
                                     onChange={(e) => setRole(e.target.value)}
-                                    className="admin_select">
+                                    className="auth_select">
                                 <option value="university">University</option>
                                 <option value="company">Company</option>
                             </select>
                         </div>
                     </div>
 
-                    <div className="admin_inputGroup">
+                    <div className="auth_inputGroup">
                         <input
                             type="text"
                             name="username"
@@ -86,10 +89,10 @@ const AdminPage = () => {
                             onChange={(e) => setUsername(e.target.value)}
                             required
                             placeholder="Username"
-                            className="admin_input"
+                            className="auth_input"
                         />
                     </div>
-                    <div className="admin_inputGroup">
+                    <div className="auth_inputGroup">
                         <input
                             type="email"
                             name="email"
@@ -97,10 +100,10 @@ const AdminPage = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             placeholder="Email"
-                            className="admin_input"
+                            className="auth_input"
                         />
                     </div>
-                    <div className="admin_inputGroup">
+                    <div className="auth_inputGroup">
                         <input
                             type="password"
                             name="password"
@@ -108,10 +111,10 @@ const AdminPage = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             placeholder="Password"
-                            className="admin_input"
+                            className="auth_input"
                         />
                     </div>
-                    <button type="submit">Create {role.charAt(0).toUpperCase() + role.slice(1)}  ➜</button>
+                    <button type="submit" className="auth_button">Create {role.charAt(0).toUpperCase() + role.slice(1)}  ➜</button>
                 </form>
 
                 <div className="fon_image_container">
