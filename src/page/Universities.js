@@ -12,6 +12,7 @@ const Universities = () => {
     });
 
     const [searchFilters, setSearchFilters] = useState({
+        name: '',
         location: 'All',
     });
 
@@ -36,7 +37,12 @@ const Universities = () => {
     const fetchUniversities = () => {
 
         if (filters.type) queryParams.type = filters.type;
-        if(searchFilters.location !== 'All') queryParams.location = searchFilters.location;
+        if(searchFilters.location !== 'All'){
+            queryParams.location = searchFilters.location;
+        }
+        if(searchFilters.name){
+            queryParams.name = searchFilters.name;
+        }
 
         const query = new URLSearchParams(queryParams).toString();
 
@@ -132,7 +138,12 @@ const Universities = () => {
 
             <div className="university-main-content">
             <div className="university_search">
-                    <input type="text" placeholder="University name" />
+                    <input
+                        type="text"
+                        placeholder="University name"
+                        value={searchFilters.name}
+                        onChange={(e) => handleSearchFilterChange('name', e.target.value)}
+                    />
                     <select
                         value={searchFilters.location}
                         onChange={(e) => handleSearchFilterChange('location', e.target.value)}

@@ -13,6 +13,10 @@ const Candidates = () => {
         gpa: '',
     });
 
+    const [searchFilters, setSearchFilters] = useState({
+        firstName: '',
+    });
+
 
 
     const [students, setStudents] = useState([]);
@@ -34,6 +38,10 @@ const Candidates = () => {
         const [minGpa, maxGpa] = filters.gpa.split(' - ').map((value) => parseFloat(value));
         queryParams.minGpa = minGpa;
         queryParams.maxGpa = maxGpa;
+    }
+
+    if(searchFilters.firstName){
+        queryParams.firstName = searchFilters.firstName;
     }
 
 
@@ -68,6 +76,18 @@ const Candidates = () => {
             ...prevFilters,
             [name]: value,
         }));
+    };
+
+    const handleSearchFilterChange = (filterName, value) => {
+        setSearchFilters((prevFilters) => ({
+            ...prevFilters,
+            [filterName]: value,
+        }));
+    };
+
+    const handleSearch = () => {
+        setCurrentPage(1);
+        fetchStudents();
     };
 
     const handlePageChange = (page) => {
@@ -132,8 +152,13 @@ const Candidates = () => {
 
             <div className="candidate-main-content">
             <div className="candidate_search">
-                    <input type="text" placeholder="Student name"/>
-                    <button>Find Student</button>
+                    <input
+                        type="text"
+                        placeholder="Student name"
+                        value={searchFilters.firstName}
+                        onChange={(e) => handleSearchFilterChange('firstName', e.target.value)}
+                    />
+                    <button onClick={handleSearch}>Find Student</button>
                 </div>
 
                 <div className="candidate-list">

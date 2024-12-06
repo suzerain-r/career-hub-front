@@ -271,7 +271,7 @@ body {
 /* Хедер */
 .common_header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;;
     align-items: center;
     background-color: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -299,11 +299,13 @@ body {
 .header_logo_container {
     display: flex;
     align-items: center;
+    margin-left: 140px;
 }
 
 .header_nav {
     display: flex;
     gap: 50px;
+
 }
 
 .header_nav a {
@@ -312,6 +314,8 @@ body {
     font-size: 16px;
     transition: color 0.3s;
 }
+
+
 
 .header_nav a:hover {
     color: #007bff;
@@ -324,7 +328,11 @@ body {
 .header_auth {
     display: flex;
     gap: 10px;
+    margin-right: 140px;
 }
+
+
+
 
 .header_auth button {
     padding: 10px 20px;
@@ -407,6 +415,9 @@ body {
 .header_profile_modal_logout_button:hover {
     opacity: 0.8;
 }
+
+
+
 
 .section-title {
     font-size: 24px;

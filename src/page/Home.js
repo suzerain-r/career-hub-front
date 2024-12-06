@@ -71,51 +71,8 @@ const Home = () => {
     useEffect(() => {
         handleCount();
         handleUniversities();
-    })
+    }, []);
 
-
-
-
-
-
-    // const universities = [
-    //     {
-    //         name: "SDU university",
-    //         location: "Almaty",
-    //         rating: 4.9,
-    //         logo: "sdu-logo.svg",
-    //     },
-    //     {
-    //         name: "KBTU",
-    //         location: "Almaty",
-    //         rating: 4.8,
-    //         logo: "kbtu-logo.svg",
-    //     },
-    //     {
-    //         name: "AITU",
-    //         location: "Astana",
-    //         rating: 4.7,
-    //         logo: "aitu-logo.svg",
-    //     },
-    //     {
-    //         name: "IITU",
-    //         location: "Almaty",
-    //         rating: 4.7,
-    //         logo: "iitu-logo.svg",
-    //     },
-    //     {
-    //         name: "AITU",
-    //         location: "Astana",
-    //         rating: 4.7,
-    //         logo: "aitu-logo.svg",
-    //     },
-    //     {
-    //         name: "IITU",
-    //         location: "Almaty",
-    //         rating: 4.7,
-    //         logo: "iitu-logo.svg",
-    //     },
-    // ];
 
 
 

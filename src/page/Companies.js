@@ -14,6 +14,7 @@ const Companies = () => {
     });
 
     const [searchFilters, setSearchFilters] = useState({
+        name: '',
         location: 'All',
     });
 
@@ -36,6 +37,9 @@ const Companies = () => {
     if (filters.type) queryParams.type = filters.type;
 
     if(searchFilters.location !== 'All') queryParams.location = searchFilters.location;
+    if(searchFilters.name){
+        queryParams.name = searchFilters.name;
+    }
 
     const fetchCompanies = () => {
 
@@ -134,7 +138,13 @@ const Companies = () => {
 
             <div className="company-main-content">
             <div className="company_search">
-                    <input type="text" placeholder="Company name"/>
+                    <input
+                        type="text"
+                        placeholder="Company name"
+                        value={searchFilters.name}
+                        onChange={(e) => handleSearchFilterChange('name', e.target.value)}
+                    />
+
                     <select
                         value={searchFilters.location}
                         onChange={(e) => handleSearchFilterChange('location', e.target.value)}

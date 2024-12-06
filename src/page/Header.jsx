@@ -68,12 +68,14 @@ const Header = () => {
                 <img src={logo} className="header_logo"></img>
                 <div className="header_logo_text">CareerHub</div>
             </div>
-            <nav className="header_nav">
-                <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Home</Link>
-                <Link to="/candidates" className={location.pathname === '/candidates' ? 'active' : ''}>Candidates</Link>
-                <Link to="/universities" className={location.pathname === '/universities' ? 'active' : ''}>Universities</Link>
-                <Link to="/companies" className={location.pathname === '/companies' ? 'active' : ''}>Companies</Link>
-            </nav>
+            {token && (
+                <nav className="header_nav">
+                    <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Home</Link>
+                    <Link to="/candidates" className={location.pathname === '/candidates' ? 'active' : ''}>Candidates</Link>
+                    <Link to="/universities" className={location.pathname === '/universities' ? 'active' : ''}>Universities</Link>
+                    <Link to="/companies" className={location.pathname === '/companies' ? 'active' : ''}>Companies</Link>
+                </nav>
+            )}
             <div className="header_auth">
                 {isAuthenticated ? (
                     <div className="header_profile_container">
