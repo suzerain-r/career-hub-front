@@ -19,15 +19,12 @@ const AdminPage = () => {
         const baseUrl = "http://localhost:8080/auth";
         let url = '';
 
-        console.log(role);
-
         switch (role.toLowerCase()) {
             case 'university':
                 url = `${baseUrl}/university/registration`;
                 break;
             case 'company':
                 url = `${baseUrl}/company/registration`;
-                console.log(url);
                 break;
         }
 

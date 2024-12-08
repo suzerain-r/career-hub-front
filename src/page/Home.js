@@ -61,14 +61,14 @@ const Home = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                //console.log(data['content']);
-                // const filteredUniversities = data['content'].filter(university =>
-                //     university.name !== null &&
-                //     university.aboutUs !== null &&
-                //     university.location !== null &&
-                //     university.website !== null
-                // );
-                setUniversities(data['content']);
+                console.log(data['content']);
+                const filteredUniversities = data['content'].filter(university =>
+                    university.name !== null &&
+                    university.aboutUs !== null &&
+                    university.location !== null &&
+                    university.website !== null
+                );
+                setUniversities(filteredUniversities);
                 setCountUniversities(data['totalElements'])
             })
             .catch((error) => {
@@ -216,7 +216,7 @@ const Home = () => {
                         <button className="university-modal-close" onClick={closeModal}>×</button>
                         <h2>{selectedUniversity.name}</h2>
                         <p><strong>Location:</strong> {selectedUniversity.location}</p>
-                        {/*<p><strong>About us:</strong> {selectedUniversity.aboutUs}</p>*/}
+                        <p><strong>About us:</strong> {selectedUniversity.aboutUs}</p>
                         <p><strong>Website:</strong> <a href={selectedUniversity.website} target="_blank"
                                                         rel="noopener noreferrer">{selectedUniversity.website}</a></p>
                     </div>

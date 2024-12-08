@@ -55,7 +55,14 @@ const Universities = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                setUniversities(data['content']);
+                const filteredUniversities = data['content'].filter(university =>
+                    university.name !== null &&
+                    university.location !== null &&
+                    university.type !== null &&
+                    university.aboutUs !== null &&
+                    university.website !== null
+                );
+                setUniversities(filteredUniversities);
                 setTotalPages(data['totalPages']);
             })
             .catch((error) => {
@@ -165,7 +172,6 @@ const Universities = () => {
                         <div key={university.id} className="university-card">
                             <div className="university-info">
                                 <h3>{university.name}</h3>
-                                <p>{university.type}</p>
                                 <p>{university.location}</p>
                             </div>
                             <button className="university-view-profile" onClick={() => openModal(university)}>
@@ -206,8 +212,7 @@ const Universities = () => {
                         <button className="university-modal-close" onClick={closeModal}>×</button>
                         <h2>{selectedUniversity.name}</h2>
                         <p><strong>Type:</strong> {selectedUniversity.type}</p>
-                        <p><strong>Location:</strong> {selectedUniversity.location}</p>
-                        <p><strong>Established Year:</strong> {selectedUniversity.establishedYear}</p>
+                        <p><strong>About us:</strong> {selectedUniversity.aboutUs}</p>
                         <p><strong>Website:</strong> <a href={selectedUniversity.website} target="_blank"
                                                         rel="noopener noreferrer">{selectedUniversity.website}</a></p>
                     </div>

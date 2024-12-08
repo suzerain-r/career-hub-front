@@ -54,7 +54,15 @@ const Companies = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                setCompanies(data['content']);
+                const filteredCompanies = data['content'].filter(company =>
+                    company.name !== null &&
+                    company.location !== null &&
+                    company.type !== null &&
+                    company.industry !== null &&
+                    company.aboutUs !== null &&
+                    company.website !== null
+                );
+                setCompanies(filteredCompanies);
                 setTotalPages(data['totalPages']);
             })
             .catch((error) => {
@@ -167,7 +175,6 @@ const Companies = () => {
                             <div key={company.id} className="company-card">
                                 <div className="company-info">
                                     <h3>{company.name}</h3>
-                                    <p>{company.type}</p>
                                     <p>{company.location}</p>
                                 </div>
                                 <button className="company-view-profile" onClick={() => openModal(company)}>
@@ -209,9 +216,8 @@ const Companies = () => {
                         <button className="company-modal-close" onClick={closeModal}>×</button>
                         <h2>{selectedCompany.name}</h2>
                         <p><strong>Type:</strong> {selectedCompany.type}</p>
-                        <p><strong>Location:</strong> {selectedCompany.location}</p>
                         <p><strong>Industry:</strong> {selectedCompany.industry}</p>
-                        <p><strong>Established Year:</strong> {selectedCompany.establishedYear}</p>
+                        <p><strong>About us:</strong> {selectedCompany.aboutUs}</p>
                         <p><strong>Website:</strong> <a href={selectedCompany.website} target="_blank"
                                                         rel="noopener noreferrer">{selectedCompany.website}</a></p>
                     </div>

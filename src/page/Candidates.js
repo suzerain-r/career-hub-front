@@ -81,8 +81,16 @@ const Candidates = () => {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                setStudents(data['content']);
-                setTotalPages(data['totalPages']);
+                const filteredStudents = data['content'].filter(student =>
+                    student.firstName !== null &&
+                    student.lastName !== null &&
+                    student.degree !== null &&
+                    student.gpa !== null &&
+                    student.aboutUs !== null &&
+                    student.phoneNumber !== null
+                );
+                setStudents(filteredStudents);
+                setTotalPages(data['totalPages'])
             })
             .catch((error) => console.error("Error fetching students:", error));
 
@@ -291,7 +299,7 @@ const Candidates = () => {
                         <h2>{selectedStudent.firstName} {selectedStudent.lastName}</h2>
                         <p><strong>Degree:</strong> {selectedStudent.degree}</p>
                         <p><strong>GPA:</strong> {selectedStudent.gpa}</p>
-                        <p><strong>Year of Enrollment:</strong> {selectedStudent.yearOfEnrollment}</p>
+                        <p><strong>About me:</strong> {selectedStudent.aboutUs}</p>
                         <p><strong>Phone Number:</strong> {selectedStudent.phoneNumber}</p>
                     </div>
                 </div>
