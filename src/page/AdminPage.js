@@ -21,7 +21,7 @@ const AdminPage = () => {
 
         console.log(role);
 
-        switch (role) {
+        switch (role.toLowerCase()) {
             case 'university':
                 url = `${baseUrl}/university/registration`;
                 break;

@@ -5,7 +5,7 @@ import universityIcon from '../resources/university-icon.svg';
 import companyIcon from '../resources/company-icon.svg';
 import candidateIcon from '../resources/candidate-icon.svg';
 import Header from "./Header";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 const Home = () => {
 
@@ -18,6 +18,7 @@ const Home = () => {
     const [countCompanies, setCountCompanies] = useState('');
 
     const [universities, setUniversities] = useState([]);
+    const [selectedUniversity, setSelectedUniversity] = useState(null);
 
 
     const handleCount =  () => {
@@ -60,6 +61,13 @@ const Home = () => {
         })
             .then((response) => response.json())
             .then((data) => {
+                //console.log(data['content']);
+                // const filteredUniversities = data['content'].filter(university =>
+                //     university.name !== null &&
+                //     university.aboutUs !== null &&
+                //     university.location !== null &&
+                //     university.website !== null
+                // );
                 setUniversities(data['content']);
                 setCountUniversities(data['totalElements'])
             })
@@ -74,6 +82,14 @@ const Home = () => {
     }, []);
 
 
+
+    const openModal = (university) => {
+        setSelectedUniversity(university);
+    };
+
+    const closeModal = () => {
+        setSelectedUniversity(null);
+    };
 
 
 
@@ -147,7 +163,7 @@ const Home = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <button className="profile_button">
+                                <button className="profile_button" onClick={() => openModal(university)}>
                                     <span className="profile_button_text">Open Profile</span>
                                 </button>
                             </div>
@@ -193,6 +209,19 @@ const Home = () => {
                 </footer>
 
             </main>
+
+            {selectedUniversity && (
+                <div className="university-modal-overlay" onClick={closeModal}>
+                    <div className="university-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="university-modal-close" onClick={closeModal}>×</button>
+                        <h2>{selectedUniversity.name}</h2>
+                        <p><strong>Location:</strong> {selectedUniversity.location}</p>
+                        {/*<p><strong>About us:</strong> {selectedUniversity.aboutUs}</p>*/}
+                        <p><strong>Website:</strong> <a href={selectedUniversity.website} target="_blank"
+                                                        rel="noopener noreferrer">{selectedUniversity.website}</a></p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

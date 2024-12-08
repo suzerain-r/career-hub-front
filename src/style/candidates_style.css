@@ -119,6 +119,25 @@ body {
     margin: 0;
 }
 
+.candidate-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.candidate-favorite {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 1.2rem;
+}
+
+.candidate-favorite:hover {
+    opacity: 0.8;
+}
+
+
 .candidate-view-profile {
     background-color: #007bff;
     color: white;

@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import '../style/candidates_style.css';
 import Header from "./Header";
+import {jwtDecode} from "jwt-decode";
 
 const Candidates = () => {
 
     const baseUrl = "http://localhost:8080";
 
     const token = localStorage.getItem("authToken");
+    const decodedToken = jwtDecode(token);
 
     const [filters, setFilters] = useState({
         degree: '',
@@ -24,6 +26,7 @@ const Candidates = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageSize] = useState(3);
+    const [favorites, setFavorites] = useState([]);
 
 
     const queryParams = {
@@ -48,6 +51,24 @@ const Candidates = () => {
     const query = new URLSearchParams(queryParams).toString();
 
 
+    const fetchFavorites = () => {
+        {decodedToken['user-role'] === "COMPANY" && (
+            fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setFavorites(data);
+                })
+                .catch((error) => console.error("Error fetching students:", error))
+        )}
+    }
+
     const fetchStudents = () => {
 
         fetch(`${baseUrl}/student/search?${query}`,{
@@ -64,11 +85,17 @@ const Candidates = () => {
                 setTotalPages(data['totalPages']);
             })
             .catch((error) => console.error("Error fetching students:", error));
+
+
     };
 
     useEffect(() => {
         fetchStudents();
     }, [filters, currentPage]);
+
+    useEffect(() => {
+        fetchFavorites();
+    }, []);
 
 
     const handleFilterChange = (name, value) => {
@@ -108,6 +135,50 @@ const Candidates = () => {
         setFilters({ type: '' });
         setCurrentPage(1);
     };
+
+
+    const addFavorite = (id) => {
+        {decodedToken['user-role'] === "COMPANY" && (
+            fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}?studentOwnerId=${id}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(() => {
+                    setFavorites((prevFavorites) => [...prevFavorites, id]);
+                })
+                .catch((error) => console.error("Error adding to favorites:", error))
+        )}
+    };
+
+    const deleteFavorite = (id) => {
+        {decodedToken['user-role'] === "COMPANY" && (
+            fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}?studentOwnerId=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(() => {
+                    setFavorites((prevFavorites) => prevFavorites.filter((favId) => favId !== id));
+                })
+                .catch((error) => console.error("Error removing from favorites:", error))
+        )}
+    };
+
+    const isFavorite = (id) => Array.isArray(favorites) && favorites.includes(id);
+
+    const toggleFavorite = (id) => {
+        if (isFavorite(id)) {
+            deleteFavorite(id);
+        } else {
+            addFavorite(id);
+        }
+    };
+
 
     return (
         <div className="candidate-page">
@@ -164,17 +235,28 @@ const Candidates = () => {
                 <div className="candidate-list">
                     {students
                         .map((student) => (
-                        <div key={student.id} className="candidate-card">
-                            <div className="candidate-info">
-                                <h3>{student.firstName} {student.lastName}</h3>
-                                <p>Degree: {student.degree}</p>
-                                <p>GPA: {student.gpa}</p>
+                            <div key={student.id} className="candidate-card">
+                                <div className="candidate-info">
+                                    <h3>{student.firstName} {student.lastName}</h3>
+                                    <p>Degree: {student.degree}</p>
+                                    <p>GPA: {student.gpa}</p>
+                                </div>
+                                <div className="candidate-actions">
+                                    {decodedToken['user-role'] === "COMPANY" && (
+                                        <button
+                                            className="candidate-favorite"
+                                            onClick={() => toggleFavorite(student.ownerId)}
+                                            aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
+                                        >
+                                            {isFavorite(student.ownerId) ? '✔' : '+'}
+                                        </button>
+                                    )}
+                                    <button className="candidate-view-profile" onClick={() => openModal(student)}>
+                                        View Profile →
+                                    </button>
+                                </div>
                             </div>
-                            <button className="candidate-view-profile" onClick={() => openModal(student)}>
-                                View Profile →
-                            </button>
-                        </div>
-                    ))}
+                        ))}
                 </div>
 
                 <div className="candidate-pagination">
