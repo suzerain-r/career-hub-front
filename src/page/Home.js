@@ -62,13 +62,13 @@ const Home = () => {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data['content']);
-                const filteredUniversities = data['content'].filter(university =>
-                    university.name !== null &&
-                    university.aboutUs !== null &&
-                    university.location !== null &&
-                    university.website !== null
-                );
-                setUniversities(filteredUniversities);
+                // const filteredUniversities = data['content'].filter(university =>
+                //     university.name !== null &&
+                //     university.aboutUs !== null &&
+                //     university.location !== null &&
+                //     university.website !== null
+                // );
+                setUniversities(data['content']);
                 setCountUniversities(data['totalElements'])
             })
             .catch((error) => {

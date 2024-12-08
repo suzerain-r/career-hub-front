@@ -81,15 +81,15 @@ const Candidates = () => {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                const filteredStudents = data['content'].filter(student =>
-                    student.firstName !== null &&
-                    student.lastName !== null &&
-                    student.degree !== null &&
-                    student.gpa !== null &&
-                    student.aboutUs !== null &&
-                    student.phoneNumber !== null
-                );
-                setStudents(filteredStudents);
+                // const filteredStudents = data['content'].filter(student =>
+                //     student.firstName !== null &&
+                //     student.lastName !== null &&
+                //     student.degree !== null &&
+                //     student.gpa !== null &&
+                //     student.aboutUs !== null &&
+                //     student.phoneNumber !== null
+                // );
+                setStudents(data['content']);
                 setTotalPages(data['totalPages'])
             })
             .catch((error) => console.error("Error fetching students:", error));

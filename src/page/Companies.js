@@ -54,15 +54,15 @@ const Companies = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                const filteredCompanies = data['content'].filter(company =>
-                    company.name !== null &&
-                    company.location !== null &&
-                    company.type !== null &&
-                    company.industry !== null &&
-                    company.aboutUs !== null &&
-                    company.website !== null
-                );
-                setCompanies(filteredCompanies);
+                // const filteredCompanies = data['content'].filter(company =>
+                //     company.name !== null &&
+                //     company.location !== null &&
+                //     company.type !== null &&
+                //     company.industry !== null &&
+                //     company.aboutUs !== null &&
+                //     company.website !== null
+                // );
+                setCompanies(data['content']);
                 setTotalPages(data['totalPages']);
             })
             .catch((error) => {

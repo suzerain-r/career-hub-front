@@ -55,14 +55,14 @@ const Universities = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                const filteredUniversities = data['content'].filter(university =>
-                    university.name !== null &&
-                    university.location !== null &&
-                    university.type !== null &&
-                    university.aboutUs !== null &&
-                    university.website !== null
-                );
-                setUniversities(filteredUniversities);
+                // const filteredUniversities = data['content'].filter(university =>
+                //     university.name !== null &&
+                //     university.location !== null &&
+                //     university.type !== null &&
+                //     university.aboutUs !== null &&
+                //     university.website !== null
+                // );
+                setUniversities(data['content']);
                 setTotalPages(data['totalPages']);
             })
             .catch((error) => {
