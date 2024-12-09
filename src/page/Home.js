@@ -1,4 +1,5 @@
 import '../style/home_style.css';
+import { useNavigate } from "react-router-dom";
 import howWorkInfo from '../resources/how-work-info.svg';
 import mainInfo from '../resources/main-info.svg';
 import universityIcon from '../resources/university-icon.svg';
@@ -108,7 +109,7 @@ const Home = () => {
                                 className="company_logo"
                             />
                             <div className="count_info">
-                                <h2>{countStudents}</h2>
+                                <h2>{countCompanies}</h2>
                                 <p>Companies</p>
                             </div>
                         </div>
@@ -130,7 +131,7 @@ const Home = () => {
                                 className="candidate_logo"
                             />
                             <div className="count_info">
-                                <h2>{countCompanies}</h2>
+                                <h2>{countStudents}</h2>
                                 <p>Candidates</p>
                             </div>
                         </div>

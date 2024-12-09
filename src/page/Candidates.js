@@ -105,7 +105,6 @@ const Candidates = () => {
         fetchFavorites();
     }, []);
 
-
     const handleFilterChange = (name, value) => {
         setFilters((prevFilters) => ({
             ...prevFilters,

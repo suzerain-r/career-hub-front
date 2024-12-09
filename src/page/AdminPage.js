@@ -28,6 +28,8 @@ const AdminPage = () => {
                 break;
         }
 
+        console.log(url);
+
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -72,8 +74,8 @@ const AdminPage = () => {
                             <select value={role}
                                     onChange={(e) => setRole(e.target.value)}
                                     className="auth_select">
-                                <option value="university">University</option>
-                                <option value="company">Company</option>
+                                <option value="University">University</option>
+                                <option value="Company">Company</option>
                             </select>
                         </div>
                     </div>
