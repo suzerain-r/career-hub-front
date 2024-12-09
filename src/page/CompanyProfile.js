@@ -19,9 +19,11 @@ const CompanyProfile = () => {
         website: "",
         establishedYear: "",
     });
+    const [favourites, setFavourites] = useState([]);
 
     const [isEditing, setIsEditing] = useState(false);
-    //?
+    const [currentTab, setCurrentTab] = useState("profile");
+
     useEffect(() => {
         fetch(`${baseUrl}/company/${decodedToken['user-id']}`,{
             method: 'GET',
@@ -35,6 +37,23 @@ const CompanyProfile = () => {
             .catch((error) => console.error("Error fetching profile data:", error));
     }, []);
 
+
+    useEffect(() => {
+        fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                setFavourites(data);
+            })
+            .catch((error) => console.error("Error fetching students:", error))
+    }, []);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfile((prevProfile) => ({
@@ -42,6 +61,8 @@ const CompanyProfile = () => {
             [name]: value,
         }));
     };
+
+
 
     const handleSave = () => {
         fetch(`${baseUrl}/company/update/${decodedToken['user-id']}`, {
@@ -65,95 +86,218 @@ const CompanyProfile = () => {
 
     return (
         <div className="company-profile-page">
-            <h2>Company Profile</h2>
-            <div>
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Company Name"
-                    value={profile.name}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <select
-                    name="type"
-                    value={profile.type}
-                    onChange={handleChange}
-                    disabled={!isEditing}
+            <div className="tabs">
+                <button
+                    onClick={() => setCurrentTab("profile")}
+                    className={currentTab === "profile" ? "active" : ""}
                 >
-                    <option value="PRIVATE">Private</option>
-                    <option value="STATE">State</option>
-                </select>
-            </div>
-            <div>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email Address"
-                    value={profile.email}
-                    onChange={handleChange}
-                    disabled
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    name="location"
-                    placeholder="Location"
-                    value={profile.location}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    name="contactPhone"
-                    placeholder="Contact Phone"
-                    value={profile.contactPhone}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    name="industry"
-                    placeholder="Industry"
-                    value={profile.industry}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    name="website"
-                    placeholder="Website"
-                    value={profile.website}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            <div>
-                <input
-                    type="number"
-                    name="establishedYear"
-                    placeholder="Year of Establishment"
-                    value={profile.establishedYear}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                />
-            </div>
-            {isEditing ? (
-                <button onClick={handleSave}>Save Changes</button>
-            ) : (
-                <button onClick={() => setIsEditing(true)} className="edit">
-                    Edit Profile
+                    Profile
                 </button>
+                <button
+                    onClick={() => setCurrentTab("favourites")}
+                    className={currentTab === "favourites" ? "active" : ""}
+                >
+                    Favourites
+                </button>
+            </div>
+            {currentTab === "profile" && (
+                <div className="profile-tab">
+                    <h2>Company Profile</h2>
+                    <div>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Company Name"
+                            value={profile.name}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    <div>
+                        <select
+                            name="type"
+                            value={profile.type}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        >
+                            <option value="PRIVATE">Private</option>
+                            <option value="STATE">State</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email Address"
+                            value={profile.email}
+                            onChange={handleChange}
+                            disabled
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            name="location"
+                            placeholder="Location"
+                            value={profile.location}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            name="contactPhone"
+                            placeholder="Contact Phone"
+                            value={profile.contactPhone}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            name="industry"
+                            placeholder="Industry"
+                            value={profile.industry}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            name="website"
+                            placeholder="Website"
+                            value={profile.website}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="number"
+                            name="establishedYear"
+                            placeholder="Year of Establishment"
+                            value={profile.establishedYear}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    {isEditing ? (
+                        <button onClick={handleSave}>Save Changes</button>
+                    ) : (
+                        <button onClick={() => setIsEditing(true)} className="edit">
+                            Edit Profile
+                        </button>
+                    )}
+                </div>
             )}
+
+            {currentTab === "favourites" && (
+                <div className="favourites-tab">
+                    <h2>Favourites</h2>
+                    <ul>
+                        {favourites.length > 0 ? (
+                            favourites.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))
+                        ) : (
+                            <p>No favourites available</p>
+                        )}
+                    </ul>
+                </div>
+            )}
+
+            {/*<h2>Company Profile</h2>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="text"*/}
+            {/*        name="name"*/}
+            {/*        placeholder="Company Name"*/}
+            {/*        value={profile.name}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <select*/}
+            {/*        name="type"*/}
+            {/*        value={profile.type}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    >*/}
+            {/*        <option value="PRIVATE">Private</option>*/}
+            {/*        <option value="STATE">State</option>*/}
+            {/*    </select>*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="email"*/}
+            {/*        name="email"*/}
+            {/*        placeholder="Email Address"*/}
+            {/*        value={profile.email}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="text"*/}
+            {/*        name="location"*/}
+            {/*        placeholder="Location"*/}
+            {/*        value={profile.location}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="text"*/}
+            {/*        name="contactPhone"*/}
+            {/*        placeholder="Contact Phone"*/}
+            {/*        value={profile.contactPhone}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="text"*/}
+            {/*        name="industry"*/}
+            {/*        placeholder="Industry"*/}
+            {/*        value={profile.industry}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="text"*/}
+            {/*        name="website"*/}
+            {/*        placeholder="Website"*/}
+            {/*        value={profile.website}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    <input*/}
+            {/*        type="number"*/}
+            {/*        name="establishedYear"*/}
+            {/*        placeholder="Year of Establishment"*/}
+            {/*        value={profile.establishedYear}*/}
+            {/*        onChange={handleChange}*/}
+            {/*        disabled={!isEditing}*/}
+            {/*    />*/}
+            {/*</div>*/}
+            {/*{isEditing ? (*/}
+            {/*    <button onClick={handleSave}>Save Changes</button>*/}
+            {/*) : (*/}
+            {/*    <button onClick={() => setIsEditing(true)} className="edit">*/}
+            {/*        Edit Profile*/}
+            {/*    </button>*/}
+            {/*)}*/}
         </div>
     );
 };

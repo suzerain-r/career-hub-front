@@ -27,6 +27,14 @@ const Candidates = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [pageSize] = useState(3);
     const [favorites, setFavorites] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [review, setReview] = useState({
+        recipientId: "",
+        senderId: decodedToken['user-id'],
+        reviewText: "",
+        rating: "",
+    });
+
 
 
     const queryParams = {
@@ -187,6 +195,52 @@ const Candidates = () => {
     };
 
 
+
+    const fetchReviews = (id) => {
+        fetch(`${baseUrl}/review/getAll/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setReviews(data['content'])
+            })
+            .catch((error) => {console.error("Error removing from reviews:", error)})
+    }
+
+
+
+    const addReview = () => {
+        fetch(`${baseUrl}/review/add`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(review),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    fetchReviews(selectedStudent.ownerId)
+                    alert("Review saved successfully!");
+                } else {
+                    alert("Error saving review!");
+                }
+            })
+    }
+
+    const handleReview = (e) => {
+        const { name, value } = e.target;
+        setReview((prevProfile) => ({
+            ...prevProfile,
+            [name]: value,
+        }));
+    }
+
+
     return (
         <div className="candidate-page">
             <Header/>
@@ -258,7 +312,14 @@ const Candidates = () => {
                                             {isFavorite(student.ownerId) ? '✔' : '+'}
                                         </button>
                                     )}
-                                    <button className="candidate-view-profile" onClick={() => openModal(student)}>
+                                    <button className="candidate-view-profile" onClick={() => {
+                                        fetchReviews(student.ownerId);
+                                        setReview(prevState => ({
+                                            ...prevState,
+                                            recipientId: student.ownerId,
+                                        }));
+                                        openModal(student)}
+                                    }>
                                         View Profile →
                                     </button>
                                 </div>
@@ -300,6 +361,39 @@ const Candidates = () => {
                         <p><strong>GPA:</strong> {selectedStudent.gpa}</p>
                         <p><strong>About me:</strong> {selectedStudent.aboutUs}</p>
                         <p><strong>Phone Number:</strong> {selectedStudent.phoneNumber}</p>
+                        {reviews
+                            .map((review) => (
+                                <div key={review.id}>
+                                    <div className="candidate-info">
+                                        <p>Sender Id: {review.senderId}</p>
+                                        <p>Review: {review.reviewText}</p>
+                                        <p>Rating: {review.rating}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        {decodedToken['user-role'] === "COMPANY" && (
+                            <>
+                                <input
+                                    type="text"
+                                    name="reviewText"
+                                    placeholder="Review"
+                                    value={review.reviewText}
+                                    onChange={handleReview}
+                                />
+                                <input
+                                    type="text"
+                                    name="rating"
+                                    placeholder="Rating"
+                                    value={review.rating}
+                                    onChange={handleReview}
+                                />
+                                <button onClick= {() => {
+                                    addReview()
+                                }}>
+                                    Send
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

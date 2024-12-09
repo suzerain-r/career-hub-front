@@ -9,7 +9,7 @@ const StudentProfile = () => {
     const token = localStorage.getItem("authToken");
     const decodedToken = jwtDecode(token);
 
-
+    const [university, setUniversity] = useState([])
     const [profile, setProfile] = useState({
         ownerId: "",
         firstName: "",
@@ -24,7 +24,7 @@ const StudentProfile = () => {
     });
 
     const [isEditing, setIsEditing] = useState(false);
-    //?
+
     useEffect(() => {
         fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
             method: 'GET',
@@ -34,9 +34,23 @@ const StudentProfile = () => {
             }
         })
             .then((response) => response.json())
-            .then((data) => setProfile(data))
-            .catch((error) => console.error("Error fetching profile data:", error));
+            .then((data) => {
+                setProfile(data);
+                return fetch(`${baseUrl}/university/${data.universityId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+            })
+            .then((response) => response.json())
+            .then((data) => setUniversity(data))
+            .catch((error) => console.error("Error fetching data:", error));
     }, []);
+
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,7 +66,7 @@ const StudentProfile = () => {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 "Content-Type": "application/json"
-            },//token
+            },
             body: JSON.stringify(profile),
         })
             .then((response) => {
@@ -96,7 +110,17 @@ const StudentProfile = () => {
                     placeholder="Email Address"
                     value={profile.email}
                     onChange={handleChange}
-                    disabled // Email обычно не редактируется
+                    disabled
+                />
+            </div>
+            <div>
+                <input
+                    type="text"
+                    name="universityName"
+                    placeholder="University Name"
+                    value={university.name}
+                    onChange={handleChange}
+                    disabled
                 />
             </div>
             <div>

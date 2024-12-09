@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../style/universities_style.css';
 import Header from "./Header";
+import {jwtDecode} from "jwt-decode";
 
 const Universities = () => {
     const baseUrl = "http://localhost:8080";
 
     const token = localStorage.getItem("authToken");
+    const decodedToken = jwtDecode(token);
 
     const [filters, setFilters] = useState({
         type: '',
@@ -21,6 +23,13 @@ const Universities = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [pageSize] = useState(3);
+    const [reviews, setReviews] = useState([]);
+    const [review, setReview] = useState({
+        recipientId: "",
+        senderId: decodedToken['user-id'],
+        reviewText: "",
+        rating: "",
+    });
 
     const [locations] = useState([
         "Astana", "Almaty"
@@ -120,6 +129,49 @@ const Universities = () => {
         setSelectedUniversity(null);
     };
 
+
+    const fetchReviews = (id) => {
+        fetch(`${baseUrl}/review/getAll/${id}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setReviews(data['content'])
+            })
+            .catch((error) => {console.error("Error removing from reviews:", error)})
+    }
+
+    const addReview = () => {
+        fetch(`${baseUrl}/review/add`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(review),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    fetchReviews(selectedUniversity.ownerId)
+                    alert("Review saved successfully!");
+                } else {
+                    alert("Error saving review!");
+                }
+            })
+    }
+
+    const handleReview = (e) => {
+        const { name, value } = e.target;
+        setReview((prevProfile) => ({
+            ...prevProfile,
+            [name]: value,
+        }));
+    }
+
     return (
         <div className="university-page">
             <Header />
@@ -174,7 +226,15 @@ const Universities = () => {
                                 <h3>{university.name}</h3>
                                 <p>{university.location}</p>
                             </div>
-                            <button className="university-view-profile" onClick={() => openModal(university)}>
+                            <button className="university-view-profile" onClick={() => {
+                                fetchReviews(university.ownerId);
+                                setReview(prevState => ({
+                                    ...prevState,
+                                    recipientId: university.ownerId,
+                                }));
+                                openModal(university)
+                            }
+                            }>
                                 View Profile →
                             </button>
                         </div>
@@ -215,6 +275,42 @@ const Universities = () => {
                         <p><strong>About us:</strong> {selectedUniversity.aboutUs}</p>
                         <p><strong>Website:</strong> <a href={selectedUniversity.website} target="_blank"
                                                         rel="noopener noreferrer">{selectedUniversity.website}</a></p>
+                        {reviews
+                            .map((review) => (
+                                <div key={review.id}>
+                                    <div className="candidate-info">
+                                        <p>Sender Id: {review.senderId}</p>
+                                        <p>Review: {review.reviewText}</p>
+                                        <p>Rating: {review.rating}</p>
+                                    </div>
+                                </div>
+                            ))}
+
+                        {decodedToken['user-role'] === "COMPANY" && (
+                            <>
+                                <input
+                                    type="text"
+                                    name="reviewText"
+                                    placeholder="Review"
+                                    value={review.reviewText}
+                                    onChange={handleReview}
+                                />
+                                <input
+                                    type="text"
+                                    name="rating"
+                                    placeholder="Rating"
+                                    value={review.rating}
+                                    onChange={handleReview}
+                                />
+                                <button onClick= {() => {
+                                    addReview()
+                                    fetchReviews(selectedUniversity.ownerId)
+                                }}>
+                                    Send
+                                </button>
+                            </>
+                        )}
+
                     </div>
                 </div>
             )}

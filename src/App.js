@@ -10,7 +10,7 @@ import Companies from "./page/Companies";
 import StudentProfile from "./page/StudentProfile";
 import UniversityProfile from "./page/UniversityProfile";
 import CompanyProfile from "./page/CompanyProfile";
-import AdminPage from "./page/AdminPage";
+import Admin from "./page/Admin";
 import CreateStudent from "./page/CreateStudent";
 
 
@@ -28,7 +28,7 @@ const App = () => {
                 <Route path="/student-profile" element={<StudentProfile />} />
                 <Route path="/university-profile" element={<UniversityProfile />} />
                 <Route path="/company-profile" element={<CompanyProfile />} />
-                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin" element={<Admin />} />
                 <Route path="/student-profile" element={<StudentProfile />} />
                 <Route path="/university-profile" element={<UniversityProfile />} />
                 <Route path="/company-profile" element={<CompanyProfile />} />

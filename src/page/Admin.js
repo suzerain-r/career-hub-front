@@ -3,7 +3,7 @@ import '../style/auth_style.css';
 import logo from '../resources/logo.svg';
 import fonImage from '../resources/auth-fon-image.png';
 
-const AdminPage = () => {
+const Admin = () => {
     const [role, setRole] = useState('University');
 
     const [username, setUsername] = useState('');
@@ -127,4 +127,4 @@ const AdminPage = () => {
     );
 };
 
-export default AdminPage;
+export default Admin;
