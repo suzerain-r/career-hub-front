@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../style/universities_style.css';
 import Header from "./Header";
+import universityIcon from "../resources/university-icon.svg";
 import {jwtDecode} from "jwt-decode";
+import companyIcon from "../resources/company-icon.svg";
 
 const Universities = () => {
     const baseUrl = "http://localhost:8080";
@@ -22,7 +24,7 @@ const Universities = () => {
     const [selectedUniversity, setSelectedUniversity] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [pageSize] = useState(3);
+    const [pageSize] = useState(5);
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState({
         recipientId: "",
@@ -174,35 +176,18 @@ const Universities = () => {
 
     return (
         <div className="university-page">
-            <Header />
+            <Header/>
 
-            <div className="university-sidebar-filters">
-                <h4>University Type</h4>
-                <div>
-                    {['PRIVATE', 'STATE'].map((type) => (
-                        <label key={type}>
-                            <input
-                                type="radio"
-                                name="type"
-                                value={type}
-                                checked={filters.type === type}
-                                onChange={(e) => handleFilterChange('type', e.target.value)}
-                            />
-                            {type}
-                        </label>
-                    ))}
-                </div>
-                <button onClick={handleClearFilters}>Clear Filters</button>
-            </div>
-
-            <div className="university-main-content">
-            <div className="university_search">
+            <div className="university_search_container">
+                <h1>Universities</h1>
+                <div className="university_search">
                     <input
                         type="text"
                         placeholder="University name"
                         value={searchFilters.name}
                         onChange={(e) => handleSearchFilterChange('name', e.target.value)}
                     />
+
                     <select
                         value={searchFilters.location}
                         onChange={(e) => handleSearchFilterChange('location', e.target.value)}
@@ -218,52 +203,86 @@ const Universities = () => {
                     </select>
                     <button onClick={handleSearch}>Find University</button>
                 </div>
+            </div>
+
+
+            <div className="university-main-section">
+                <div className="university-sidebar-filters">
+                    <h4>University Type</h4>
+                    <div>
+                        {['PRIVATE', 'STATE'].map((type) => (
+                            <label key={type}>
+                                <input
+                                    type="radio"
+                                    name="type"
+                                    value={type}
+                                    checked={filters.type === type}
+                                    onChange={(e) => handleFilterChange('type', e.target.value)}
+                                />
+                                {type}
+                            </label>
+                        ))}
+                    </div>
+                    <button onClick={handleClearFilters}>Clear Filters</button>
+                </div>
 
                 <div className="university-list">
                     {universities.map((university) => (
                         <div key={university.id} className="university-card">
-                            <div className="university-info">
-                                <h3>{university.name}</h3>
-                                <p>{university.location}</p>
+                            <div>
+                                <img
+                                    src={universityIcon}
+                                    className="company_logo"
+                                />
                             </div>
-                            <button className="university-view-profile" onClick={() => {
-                                fetchReviews(university.ownerId);
-                                setReview(prevState => ({
-                                    ...prevState,
-                                    recipientId: university.ownerId,
-                                }));
-                                openModal(university)
-                            }
-                            }>
-                                View Profile →
-                            </button>
+                            <div className="card-right-section">
+                                <div className="company-info">
+                                    <h3>{university.name}</h3>
+                                    <p>
+                                        <i className="location_icon"></i>
+                                        <span className="location_name">{university.location}</span>
+                                    </p>
+                                </div>
+                                <button className="university-view-profile" onClick={() => {
+                                    fetchReviews(university.ownerId);
+                                    setReview(prevState => ({
+                                        ...prevState,
+                                        recipientId: university.ownerId,
+                                    }));
+                                    openModal(university)
+                                }
+                                }>
+                                    View Profile →
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="university-pagination">
+            </div>
+
+            <div className="university-pagination">
+                <button
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                >
+                    ←
+                </button>
+                {[...Array(totalPages).keys()].map((page) => (
                     <button
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
+                        key={page + 1}
+                        className={currentPage === page + 1 ? 'active' : ''}
+                        onClick={() => handlePageChange(page + 1)}
                     >
-                        ←
+                        {page + 1}
                     </button>
-                    {[...Array(totalPages).keys()].map((page) => (
-                        <button
-                            key={page + 1}
-                            className={currentPage === page + 1 ? 'active' : ''}
-                            onClick={() => handlePageChange(page + 1)}
-                        >
-                            {page + 1}
-                        </button>
-                    ))}
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                        →
-                    </button>
-                </div>
+                ))}
+                <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                >
+                    →
+                </button>
             </div>
 
             {selectedUniversity && (
@@ -302,7 +321,7 @@ const Universities = () => {
                                     value={review.rating}
                                     onChange={handleReview}
                                 />
-                                <button onClick= {() => {
+                                <button onClick={() => {
                                     addReview()
                                     fetchReviews(selectedUniversity.ownerId)
                                 }}>

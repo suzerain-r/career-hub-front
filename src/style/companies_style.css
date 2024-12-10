@@ -36,12 +36,10 @@ body {
 }
 
 .company-sidebar-filters h4 {
-    margin: 0;
-    margin-bottom: 20px;
+    margin: 0 0 20px;
 }
 
 .company-sidebar-filters label {
-    display: block;
     margin-bottom: 0.5rem;
     color: #495166;
     display: flex;
@@ -49,8 +47,7 @@ body {
 }
 
 .company-sidebar-filters input {
-    margin: 0;
-    margin-right: 5px;
+    margin: 0 5px 0 0;
     width: 20px;
     height: 20px;
 }
@@ -65,7 +62,7 @@ body {
     color: #007bff;
     width: 100%;
     margin-top: 15px;
-    border: 0px solid #007bff;
+    border: 0 solid #007bff;
 }
 
 .company-sidebar-filters button:hover {
@@ -177,13 +174,11 @@ body {
     font-size: 0.9rem;
     color: #777;
     display: flex;
-    justify-content: center;
     margin: 0;
 }
 
 .company-view-profile {
     background-color: #E7F0FA;
-    color: white;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 3px;

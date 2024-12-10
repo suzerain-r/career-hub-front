@@ -253,7 +253,7 @@ const Companies = () => {
                                         }));
                                         openModal(company)
                                     }}>
-                                        View Profile ➜
+                                        View Profile →
                                     </button>
                                 </div>
 

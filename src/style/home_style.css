@@ -63,8 +63,7 @@ body {
 
 .home_universities {
     text-align: center;
-    padding: 40px 20px;
-    padding-bottom: 80px;
+    padding: 40px 20px 80px;
     background-color: #f9f9f9;
 }
 
@@ -334,20 +333,17 @@ body {
 
 
 
-.header_auth button {
+.header_sign_in {
     padding: 10px 20px;
     font-size: 14px;
     border: 1px solid #007bff;
     border-radius: 5px;
+    background-color: transparent;
     cursor: pointer;
+    color: #007bff;
     transition: all 0.3s ease;
 }
 
-.header_sign_in {
-    background-color: transparent;
-    color: #007bff;
-    border: 5px solid black;
-}
 
 .header_sign_in:hover{
     opacity: 0.8;
@@ -391,8 +387,7 @@ body {
     gap: 10px;
 }
 
-.header_profile_modal_button,
-.header_profile_modal_logout_button {
+.header_profile_modal_button {
     width: 100%;
     color: #007bff;
     background-color: transparent;
@@ -406,9 +401,16 @@ body {
 }
 
 .header_profile_modal_logout_button {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
     background-color: #ff4d4d;
+    border: 1px solid #ff4d4d;
     color: #fff;
-    border: none;
 }
 
 .header_profile_modal_button:hover,
@@ -570,9 +572,7 @@ body {
     justify-content: center;
     gap: 20px;
     background-color: #f8f9fa;
-    padding: 0 40px;
-    padding-bottom: 80px;
-    padding-top: 30px;
+    padding: 30px 40px 80px;
 }
 
 .count_item {

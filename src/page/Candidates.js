@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../style/candidates_style.css';
 import Header from "./Header";
 import {jwtDecode} from "jwt-decode";
+import candidateIcon from "../resources/candidate-icon.svg";
 
 const Candidates = () => {
 
@@ -25,7 +26,7 @@ const Candidates = () => {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [pageSize] = useState(3);
+    const [pageSize] = useState(5);
     const [favorites, setFavorites] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState({
@@ -245,111 +246,136 @@ const Candidates = () => {
         <div className="candidate-page">
             <Header/>
 
-            <div className="candidate-sidebar-filters">
-                <h4>Degree</h4>
-                <div>
-                    {['BACHELOR', 'MASTER', 'DOCTORATE'].map((degree) => (
-                        <label key={degree}>
-                            <input
-                                type="radio"
-                                name="degree"
-                                value={degree}
-                                checked={filters.degree === degree}
-                                onChange={(e) => handleFilterChange('degree', e.target.value)}
-                            />
-                            {degree}
-                        </label>
-                    ))}
-                </div>
-
-                <h4>GPA</h4>
-                <div>
-                    {['0.0 - 2.0', '2.0 - 3.0', '3.0 - 4.0'].map((gpa) => (
-                        <label key={gpa}>
-                            <input
-                                type="radio"
-                                name="gpa"
-                                value={gpa}
-                                checked={filters.gpa === gpa}
-                                onChange={(e) => handleFilterChange('gpa', e.target.value)}
-                            />
-                            {gpa}
-                        </label>
-                    ))}
-                </div>
-
-                <button onClick={handleClearFilters}>Clear Filters</button>
-
-            </div>
-
-            <div className="candidate-main-content">
-            <div className="candidate_search">
+            <div className="candidate_search_container">
+                <h1>Candidates</h1>
+                <div className="candidate_search">
                     <input
                         type="text"
-                        placeholder="Student name"
-                        value={searchFilters.firstName}
-                        onChange={(e) => handleSearchFilterChange('firstName', e.target.value)}
+                        placeholder="Candidate name"
+                        value={searchFilters.name}
+                        onChange={(e) => handleSearchFilterChange('name', e.target.value)}
                     />
-                    <button onClick={handleSearch}>Find Student</button>
+
+                    <button onClick={handleSearch}>Find Candidate</button>
+                </div>
+            </div>
+
+            <div className="company-main-section">
+                {/*<div className="candidate_search">*/}
+                {/*        <input*/}
+                {/*            type="text"*/}
+                {/*            placeholder="Student name"*/}
+                {/*            value={searchFilters.firstName}*/}
+                {/*            onChange={(e) => handleSearchFilterChange('firstName', e.target.value)}*/}
+                {/*        />*/}
+                {/*        <button onClick={handleSearch}>Find Student</button>*/}
+                {/*    </div>*/}
+
+                <div className="candidate-sidebar-filters">
+                    <h4>Degree</h4>
+                    <div>
+                        {['BACHELOR', 'MASTER', 'DOCTORATE'].map((degree) => (
+                            <label key={degree}>
+                                <input
+                                    type="radio"
+                                    name="degree"
+                                    value={degree}
+                                    checked={filters.degree === degree}
+                                    onChange={(e) => handleFilterChange('degree', e.target.value)}
+                                />
+                                {degree}
+                            </label>
+                        ))}
+                    </div>
+
+                    <h4>GPA</h4>
+                    <div>
+                        {['0.0 - 2.0', '2.0 - 3.0', '3.0 - 4.0'].map((gpa) => (
+                            <label key={gpa}>
+                                <input
+                                    type="radio"
+                                    name="gpa"
+                                    value={gpa}
+                                    checked={filters.gpa === gpa}
+                                    onChange={(e) => handleFilterChange('gpa', e.target.value)}
+                                />
+                                {gpa}
+                            </label>
+                        ))}
+                    </div>
+
+                    <button onClick={handleClearFilters}>Clear Filters</button>
+
                 </div>
 
                 <div className="candidate-list">
                     {students
                         .map((student) => (
                             <div key={student.id} className="candidate-card">
-                                <div className="candidate-info">
-                                    <h3>{student.firstName} {student.lastName}</h3>
-                                    <p>Degree: {student.degree}</p>
-                                    <p>GPA: {student.gpa}</p>
+                                <div>
+                                    <img
+                                        src={candidateIcon}
+                                        className="company_logo"
+                                    />
                                 </div>
-                                <div className="candidate-actions">
-                                    {decodedToken['user-role'] === "COMPANY" && (
-                                        <button
-                                            className="candidate-favorite"
-                                            onClick={() => toggleFavorite(student.ownerId)}
-                                            aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
-                                        >
-                                            {isFavorite(student.ownerId) ? '✔' : '+'}
+
+                                <div className="card-right-section">
+                                    <div className="candidate-info">
+                                        <h3>{student.firstName} {student.lastName}</h3>
+                                        <p>Degree: {student.degree}</p>
+                                    </div>
+
+                                    <div className="candidate-actions">
+                                        {decodedToken['user-role'] === "COMPANY" && (
+                                            <button
+                                                className="candidate-favorite"
+                                                onClick={() => toggleFavorite(student.ownerId)}
+                                                aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
+                                            >
+                                                {isFavorite(student.ownerId) ? '✔' : '+'}
+                                            </button>
+                                        )}
+                                        <button className="candidate-view-profile" onClick={() => {
+                                            fetchReviews(student.ownerId);
+                                            setReview(prevState => ({
+                                                ...prevState,
+                                                recipientId: student.ownerId,
+                                            }));
+                                            openModal(student)
+                                        }
+                                        }>
+                                            View Profile →
                                         </button>
-                                    )}
-                                    <button className="candidate-view-profile" onClick={() => {
-                                        fetchReviews(student.ownerId);
-                                        setReview(prevState => ({
-                                            ...prevState,
-                                            recipientId: student.ownerId,
-                                        }));
-                                        openModal(student)}
-                                    }>
-                                        View Profile →
-                                    </button>
+
+                                    </div>
                                 </div>
+
                             </div>
                         ))}
                 </div>
-
-                <div className="candidate-pagination">
+            </div>
+            <div className="candidate-pagination">
+                <button
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                >
+                    ←
+                </button>
+                {[...Array(totalPages).keys()].map((page) => (
                     <button
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
+                        key={page + 1}
+                        className={currentPage === page + 1 ? 'active' : ''}
+                        onClick={() => handlePageChange(page + 1)}
                     >
-                        ←
+                        {page + 1}
                     </button>
-                    {[...Array(totalPages).keys()].map((page) => (
-                        <button
-                            key={page + 1}
-                            className={currentPage === page + 1 ? 'active' : ''}
-                            onClick={() => handlePageChange(page + 1)}
-                        >
-                            {page + 1}
-                        </button>
-                    ))}
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                        →
-                    </button>
-                </div>
+                ))}
+                <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                >
+                    →
+                </button>
             </div>
 
             {selectedStudent && (
@@ -387,7 +413,7 @@ const Candidates = () => {
                                     value={review.rating}
                                     onChange={handleReview}
                                 />
-                                <button onClick= {() => {
+                                <button onClick={() => {
                                     addReview()
                                 }}>
                                     Send
