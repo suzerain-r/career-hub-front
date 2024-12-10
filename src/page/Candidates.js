@@ -3,6 +3,8 @@ import '../style/candidates_style.css';
 import Header from "./Header";
 import {jwtDecode} from "jwt-decode";
 import candidateIcon from "../resources/candidate-icon.svg";
+import favourite_active from "../resources/favourite_active.svg";
+import favourite_not_active from "../resources/favourite_not_active.svg";
 
 const Candidates = () => {
 
@@ -261,15 +263,6 @@ const Candidates = () => {
             </div>
 
             <div className="company-main-section">
-                {/*<div className="candidate_search">*/}
-                {/*        <input*/}
-                {/*            type="text"*/}
-                {/*            placeholder="Student name"*/}
-                {/*            value={searchFilters.firstName}*/}
-                {/*            onChange={(e) => handleSearchFilterChange('firstName', e.target.value)}*/}
-                {/*        />*/}
-                {/*        <button onClick={handleSearch}>Find Student</button>*/}
-                {/*    </div>*/}
 
                 <div className="candidate-sidebar-filters">
                     <h4>Degree</h4>
@@ -332,7 +325,10 @@ const Candidates = () => {
                                                 onClick={() => toggleFavorite(student.ownerId)}
                                                 aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
                                             >
-                                                {isFavorite(student.ownerId) ? '✔' : '+'}
+                                                {isFavorite(student.ownerId) ?
+                                                    <img src={favourite_active}></img> :
+                                                    <img src={favourite_not_active}></img>
+                                                }
                                             </button>
                                         )}
                                         <button className="candidate-view-profile" onClick={() => {

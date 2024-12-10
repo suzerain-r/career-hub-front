@@ -288,6 +288,9 @@ body {
     }
 }
 
+
+
+
 @media (max-width: 480px) {
     .candidate-pagination button {
         padding: 0.3rem 0.5rem;
