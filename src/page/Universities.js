@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../style/universities_style.css';
 import Header from "./Header";
+import StarRating from "./starRating";
 import universityIcon from "../resources/university-icon.svg";
 import websiteIcon from "../resources/website-icon.svg";
 import phoneIcon from "../resources/phone-icon.svg";
@@ -332,15 +333,25 @@ const Universities = () => {
                                                 value={review.reviewText}
                                                 onChange={handleReview}
                                             />
-                                            <input
-                                                type="number"
-                                                name="rating"
-                                                placeholder="Rating (1-5)"
-                                                min="1"
-                                                max="5"
-                                                value={review.rating}
-                                                onChange={handleReview}
+                                            {/*<input*/}
+                                            {/*    type="number"*/}
+                                            {/*    name="rating"*/}
+                                            {/*    placeholder="Rating (1-5)"*/}
+                                            {/*    min="1"*/}
+                                            {/*    max="5"*/}
+                                            {/*    value={review.rating}*/}
+                                            {/*    onChange={handleReview}*/}
+                                            {/*/>*/}
+                                            <StarRating
+                                                rating={review.rating}
+                                                onRatingChange={(value) =>
+                                                    setReview((prevReview) => ({
+                                                        ...prevReview,
+                                                        rating: value,
+                                                    }))
+                                                }
                                             />
+
                                             <button
                                                 className="submit-button"
                                                 onClick={() => {
