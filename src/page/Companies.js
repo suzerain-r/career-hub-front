@@ -3,6 +3,11 @@ import '../style/companies_style.css';
 import Header from "./Header";
 import companyIcon from "../resources/company-icon.svg";
 import {jwtDecode} from "jwt-decode";
+import StarRating from "./StarRating";
+import websiteIcon from "../resources/website-icon.svg";
+import locationIcon from "../resources/modal-location-icon.svg";
+import phoneIcon from "../resources/phone-icon.svg";
+import emailIcon from "../resources/email-icon.svg";
 
 const Companies = () => {
 
@@ -291,46 +296,127 @@ const Companies = () => {
                 <div className="company-modal-overlay" onClick={closeModal}>
                     <div className="company-modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="company-modal-close" onClick={closeModal}>×</button>
-                        <h2>{selectedCompany.name}</h2>
-                        <p><strong>Type:</strong> {selectedCompany.type}</p>
-                        <p><strong>Industry:</strong> {selectedCompany.industry}</p>
-                        <p><strong>About us:</strong> {selectedCompany.aboutUs}</p>
-                        <p><strong>Website:</strong> <a href={selectedCompany.website} target="_blank"
-                                                        rel="noopener noreferrer">{selectedCompany.website}</a></p>
 
-                        {reviews
-                            .map((review) => (
-                                <div key={review.id}>
-                                    <div className="candidate-info">
-                                        <p>Sender Id: {review.senderId}</p>
-                                        <p>Review: {review.reviewText}</p>
-                                        <p>Rating: {review.rating}</p>
+                        <div className="modal-header">
+                            <img
+                                src={companyIcon}
+                                className="company_logo"
+                            />
+                            <div className="header-info">
+                                <h2>{selectedCompany.name}</h2>
+                                <p><strong>Type:</strong> {selectedCompany.type}</p>
+                            </div>
+                        </div>
+
+
+                        <div className="main-section">
+                            <div className="left-side">
+                                <div className="about-us-container">
+                                    <h2>Information about company</h2>
+                                    <p>{selectedCompany.aboutUs}</p>
+                                </div>
+
+                                <div className="review-container">
+                                    <div className="reviews-list">
+                                        {reviews.map((review) => (
+                                            <div key={review.id} className="review-item">
+                                                <div className="candidate-info">
+                                                    <p><strong>Sender Id:</strong> {review.senderId}</p>
+                                                    <p className="review-text">{review.reviewText}</p>
+                                                    <p><strong>Rating: </strong> {review.rating} / 5</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {(decodedToken['user-role'] === "UNIVERSITY" || decodedToken['user-role'] === "STUDENT") && (
+                                        <div className="review-form">
+                                            <input
+                                                type="text"
+                                                name="reviewText"
+                                                placeholder="Write your review..."
+                                                value={review.reviewText}
+                                                onChange={handleReview}
+                                            />
+                                            {/*<input*/}
+                                            {/*    type="number"*/}
+                                            {/*    name="rating"*/}
+                                            {/*    placeholder="Rating (1-5)"*/}
+                                            {/*    min="1"*/}
+                                            {/*    max="5"*/}
+                                            {/*    value={review.rating}*/}
+                                            {/*    onChange={handleReview}*/}
+                                            {/*/>*/}
+                                            <StarRating
+                                                rating={review.rating}
+                                                onRatingChange={(value) =>
+                                                    setReview((prevReview) => ({
+                                                        ...prevReview,
+                                                        rating: value,
+                                                    }))
+                                                }
+                                            />
+
+                                            <button
+                                                className="submit-button"
+                                                onClick={() => {
+                                                    addReview();
+                                                    fetchReviews(selectedCompany.ownerId);
+                                                }}
+                                            >
+                                                Send
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="right-side">
+                                <h3>Contact Information</h3>
+                                <div className="contact-item">
+                                    <img
+                                        src={websiteIcon}
+                                        className="icon"
+                                    />
+                                    <div className="contact-item-info">
+                                        <p className="label">WEBSITE</p>
+                                        <p><a href={selectedCompany.website} target="_blank"
+                                              rel="noopener noreferrer">{selectedCompany.website}</a></p>
                                     </div>
                                 </div>
-                            ))}
-                        {(decodedToken['user-role'] === "UNIVERSITY" || decodedToken['user-role'] === "STUDENT")&& (
-                            <>
-                                <input
-                                    type="text"
-                                    name="reviewText"
-                                    placeholder="Review"
-                                    value={review.reviewText}
-                                    onChange={handleReview}
-                                />
-                                <input
-                                    type="text"
-                                    name="rating"
-                                    placeholder="Rating"
-                                    value={review.rating}
-                                    onChange={handleReview}
-                                />
-                                <button onClick= {() => {
-                                    addReview()
-                                }}>
-                                    Send
-                                </button>
-                            </>
-                        )}
+                                <div className="contact-item">
+                                    <img
+                                        src={locationIcon}
+                                        className="icon"
+                                    />
+                                    <div className="contact-item-info">
+                                        <p className="label">LOCATION</p>
+                                        <p>{selectedCompany.location}</p>
+                                    </div>
+                                </div>
+                                <div className="contact-item">
+                                    <img
+                                        src={phoneIcon}
+                                        className="icon"
+                                    />
+                                    <div className="contact-item-info">
+                                        <p className="label">PHONE</p>
+                                        <p>{selectedCompany.contactPhone}</p>
+                                    </div>
+                                </div>
+                                <div className="contact-item">
+                                    <img
+                                        src={emailIcon}
+                                        className="icon"
+                                    />
+                                    <div className="contact-item-info">
+                                        <p className="label">EMAIL ADDRESS</p>
+                                        <p><a href={selectedCompany.email}>{selectedCompany.email}</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                     </div>
                 </div>

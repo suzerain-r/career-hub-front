@@ -247,6 +247,10 @@ body {
     cursor: pointer;
 }
 
+.university-modal-close:hover {
+    color: red;
+}
+
 
 /* Адаптивность */
 @media (max-width: 768px) {

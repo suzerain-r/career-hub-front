@@ -249,7 +249,8 @@ body {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    width: 400px;
+    width: 650px;
+    height: 650px;
     position: relative;
     text-align: center;
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../style/universities_style.css';
 import Header from "./Header";
-import StarRating from "./starRating";
+import StarRating from "./StarRating";
 import universityIcon from "../resources/university-icon.svg";
 import websiteIcon from "../resources/website-icon.svg";
 import phoneIcon from "../resources/phone-icon.svg";
@@ -296,11 +296,11 @@ const Universities = () => {
                         <div className="modal-header">
                             <img
                                 src={universityIcon}
-                                className="company_logo"
+                                className="university_logo"
                             />
                             <div className="header-info">
                                 <h2>{selectedUniversity.name}</h2>
-                                <p><strong>Type:</strong> {selectedUniversity.type.toLowerCase()}</p>
+                                <p><strong>Type:</strong> {selectedUniversity.type}</p>
                             </div>
                         </div>
 
