@@ -78,9 +78,9 @@ const UniversityProfile = () => {
                         <label>University Name</label>
                         <input
                             type="text"
-                            id="companyName"
+                            id="universityName"
                             name="name"
-                            placeholder="Company Name"
+                            placeholder="University Name"
                             value={profile.name}
                             onChange={handleChange}
                             disabled={!isEditing}
