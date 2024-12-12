@@ -162,23 +162,13 @@ const Candidates = () => {
     };
 
     const fetchUniversity = (id) => {
-        fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
+        fetch(`${baseUrl}/university/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             }
         })
-            .then((response) => response.json())
-            .then(() => {
-                return fetch(`${baseUrl}/university/${id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
-            })
             .then((response) => response.json())
             .then((data) => setUniversity(data))
             .catch((error) => console.error("Error fetching university:", error));
@@ -485,7 +475,10 @@ const Candidates = () => {
                                                 onClick={() => {
                                                     addReview();
                                                     fetchReviews(selectedStudent.ownerId);
-                                                    setReview({ reviewText: '', rating: 0 });
+                                                    setReview(prevState => ({
+                                                        ...prevState,
+                                                        reviewText: '', rating: 0
+                                                    }));
                                                 }}
                                             >
                                                 Send

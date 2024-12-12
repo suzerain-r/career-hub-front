@@ -378,7 +378,10 @@ const Universities = () => {
                                                 onClick={() => {
                                                     addReview();
                                                     fetchReviews(selectedUniversity.ownerId);
-                                                    setReview({ reviewText: '', rating: 0 });
+                                                    setReview(prevState => ({
+                                                        ...prevState,
+                                                        reviewText: '', rating: 0
+                                                    }));
                                                 }}
                                             >
                                                 Send

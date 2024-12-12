@@ -13,7 +13,7 @@ const UniversityProfile = () => {
     const [profile, setProfile] = useState({
         ownerId: "",
         name: "",
-        type: "PRIVATE",
+        type: "",
         email: "",
         contactPhone: "",
         location: "",

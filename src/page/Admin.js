@@ -48,7 +48,7 @@ const Admin = () => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Registration successful', data);
-
+                alert('Registration successful');
             } else {
                 console.log('Registration failed', data.message);
             }

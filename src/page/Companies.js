@@ -379,7 +379,10 @@ const Companies = () => {
                                                 onClick={() => {
                                                     addReview();
                                                     fetchReviews(selectedCompany.ownerId);
-                                                    setReview({ reviewText: '', rating: 0 });
+                                                    setReview(prevState => ({
+                                                        ...prevState,
+                                                        reviewText: '', rating: 0
+                                                    }));
                                                 }}
                                             >
                                                 Send

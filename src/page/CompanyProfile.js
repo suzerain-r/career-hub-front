@@ -21,7 +21,7 @@ const CompanyProfile = () => {
         aboutUs: "",
         ownerId: "",
         name: "",
-        type: "PRIVATE",
+        type: "",
         email: "",
         location: "",
         contactPhone: "",
@@ -77,35 +77,34 @@ const CompanyProfile = () => {
     }, []);
 
 
+
     useEffect(() => {
-        if (favourites.length > 0) {
-            const fetchStudentData = async () => {
-                try {
-                    const studentRequests = favourites.map((id) =>
-                        fetch(`${baseUrl}/student/${id}`, {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json',
-                            },
-                        }).then((response) => {
-                            if (!response.ok) {
-                                throw new Error(`Failed to fetch student with id ${id}`);
-                            }
-                            return response.json();
-                        })
-                    );
+        const fetchStudentData = async () => {
+            try {
+                const studentRequests = favourites.map((id) =>
+                    fetch(`${baseUrl}/student/${id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }).then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch student with id ${id}`);
+                        }
+                        return response.json();
+                    })
+                );
 
-                    const studentData = await Promise.all(studentRequests);
+                const studentData = await Promise.all(studentRequests);
 
-                    setStudents(studentData);
-                } catch (error) {
-                    console.error("Error fetching students:", error);
-                }
-            };
+                setStudents(studentData);
+            } catch (error) {
+                console.error("Error fetching students:", error);
+            }
+        };
 
-            fetchStudentData().then();
-        }
+        fetchStudentData().then();
     }, [favourites]);
 
     const handleChange = (e) => {
@@ -116,13 +115,28 @@ const CompanyProfile = () => {
         }));
     };
 
+
+    const deleteFavorite = (id) => {
+        {decodedToken['user-role'] === "COMPANY" && (
+            fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}?studentOwnerId=${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(() => {
+                    setFavourites(prevFavourites => prevFavourites.filter(favId => favId !== id));
+                })
+                .catch((error) => console.error("Error removing from favorites:", error))
+        )}
+    };
+
     const isFavorite = (id) => Array.isArray(favourites) && favourites.includes(id);
 
     const toggleFavorite = (id) => {
         if (isFavorite(id)) {
-            //deleteFavorite(id);
-        } else {
-            //addFavorite(id);
+            deleteFavorite(id);
         }
     };
 
