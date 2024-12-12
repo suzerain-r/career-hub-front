@@ -9,8 +9,7 @@ body {
 }
 
 .company-profile-page {
-    margin: 50px auto;
-    margin-top: 300px;
+    margin: 300px auto 50px;
 }
 
 .company-profile-page h2 {
@@ -99,7 +98,7 @@ body {
 .tabs button {
     padding: 10px 20px;
     border: 2px solid #007bff;
-    background: transparent;
+
     background: #007bff;
     color: white;
     cursor: pointer;
@@ -113,7 +112,7 @@ body {
 .tabs button.active {
     color: #007bff;
     border: 2px solid #007bff;
-    background: white;
+    background: transparent;
 }
 
 .tabs button:hover {
@@ -141,6 +140,17 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+.row4-single {
+    width: 60%;
+    display: flex;
+    align-items: start;
+}
+
+.input-container-single {
+    width: 50%;
+    padding: 10px;
 }
 
 .row5 {

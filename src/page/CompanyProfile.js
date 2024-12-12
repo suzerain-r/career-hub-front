@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../style/company_profile_style.css";
 import {jwtDecode} from "jwt-decode";
-import candidateIcon from "../resources/candidate-icon.svg";
 import favourite_active from "../resources/favourite_active.svg";
 import favourite_not_active from "../resources/favourite_not_active.svg";
 import Header from "./Header";
@@ -262,8 +261,7 @@ const CompanyProfile = () => {
 
                     <div className="input-container row5">
                         <label>Information about company</label>
-                        <textarea type="text"
-                                  name="aboutUs"
+                        <textarea name="aboutUs"
                                   placeholder=""
                                   value={profile.aboutUs}
                                   onChange={handleChange}
@@ -301,8 +299,8 @@ const CompanyProfile = () => {
                                             aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
                                         >
                                             {isFavorite(student.ownerId) ?
-                                                <img src={favourite_active}></img> :
-                                                <img src={favourite_not_active}></img>
+                                                <img src={favourite_active} alt={""}></img> :
+                                                <img src={favourite_not_active} alt={""}></img>
                                             }
                                         </button>
                                     )}
