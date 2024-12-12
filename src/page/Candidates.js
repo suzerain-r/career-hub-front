@@ -161,7 +161,6 @@ const Candidates = () => {
         setCurrentPage(1);
     };
 
-
     const fetchUniversity = (id) => {
         fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
             method: 'GET',
@@ -184,8 +183,6 @@ const Candidates = () => {
             .then((data) => setUniversity(data))
             .catch((error) => console.error("Error fetching university:", error));
     }
-
-
 
     const addFavorite = (id) => {
         {decodedToken['user-role'] === "COMPANY" && (
@@ -228,8 +225,6 @@ const Candidates = () => {
             addFavorite(id);
         }
     };
-
-
 
     const fetchReviews = (id) => {
         fetch(`${baseUrl}/review/getAll/${id}`, {

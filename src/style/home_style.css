@@ -616,3 +616,18 @@ body {
     font-size: 0.9rem;
     color: #6c757d;
 }
+
+.average-rating-container {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.average-rating-container p {
+    font-size: 14px;
+    color: white;
+    margin: 0;
+    padding: 5px;
+    background-color: #007bff;
+    border-radius: 10px;
+}

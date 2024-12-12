@@ -9,7 +9,7 @@ body {
 }
 
 .company-profile-page {
-    margin: 300px auto 50px;
+    margin: 250px auto 50px;
 }
 
 .company-profile-page h2 {
@@ -179,4 +179,24 @@ body {
     text-align: left;
     width: 30%;
     padding: 10px;
+}
+
+.favourites-tab {
+    height: 658px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.about-us-container h2 {
+    font-size: 16px;
+    text-align: left;
+}
+
+.review-form input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

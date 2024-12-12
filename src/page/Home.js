@@ -202,11 +202,13 @@ const Home = () => {
                                     />
                                     <div className="location_container">
                                         <h3>{university.name}</h3>
-                                        <p>{university.averageRating}</p>
                                         <p className="university_location">
                                             <i className="location_icon"></i>
                                             <span className="location_name">{university.location}</span>
                                         </p>
+                                    </div>
+                                    <div className="average-rating-container">
+                                        <p>{university.averageRating.toFixed(2)}</p>
                                     </div>
                                 </div>
                                 <button className="profile_button" onClick={() => openModal(university)}>
