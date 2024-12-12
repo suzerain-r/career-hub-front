@@ -24,6 +24,7 @@ const Universities = () => {
         location: 'All',
     });
 
+
     const [universities, setUniversities] = useState([]);
     const [selectedUniversity, setSelectedUniversity] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -35,6 +36,7 @@ const Universities = () => {
         senderId: decodedToken['user-id'],
         reviewText: "",
         rating: "",
+        recipientRole: "UNIVERSITY",
     });
 
     const [locations] = useState([
@@ -146,7 +148,9 @@ const Universities = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                setReviews(data['content'])
+                console.log(data['content'])
+                //setReviews(data['content']);
+                fetchSenders(data['content']);
             })
             .catch((error) => {console.error("Error removing from reviews:", error)})
     }
@@ -176,6 +180,30 @@ const Universities = () => {
             ...prevProfile,
             [name]: value,
         }));
+    }
+
+    const fetchSenders = async (reviewList) => {
+        try{
+            const promises = reviewList.map((review) =>
+                fetch(`${baseUrl}/${review.senderRole.toLowerCase()}/${review.senderId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => ({
+                        ...review,
+                        senderName: data.name,
+                    }))
+            );
+            const updatedReviews = await Promise.all(promises);
+            setReviews(updatedReviews);
+        }
+        catch (error) {
+            console.error("Error fetching sender information:", error);
+        }
     }
 
     return (
@@ -249,6 +277,7 @@ const Universities = () => {
                                 </div>
                                 <button className="university-view-profile" onClick={() => {
                                     fetchReviews(university.ownerId);
+                                    console.log(university.ownerId);
                                     setReview(prevState => ({
                                         ...prevState,
                                         recipientId: university.ownerId,
@@ -316,7 +345,7 @@ const Universities = () => {
                                         {reviews.map((review) => (
                                             <div key={review.id} className="review-item">
                                                 <div className="candidate-info">
-                                                    <p><strong>Sender Id:</strong> {review.senderId}</p>
+                                                    <p><strong>Sender:</strong> {review.senderName}</p>
                                                     <p className="review-text">{review.reviewText}</p>
                                                     <p><strong>Rating: </strong> {review.rating} / 5</p>
                                                 </div>

@@ -37,6 +37,7 @@ const Companies = () => {
         senderId: decodedToken['user-id'],
         reviewText: "",
         rating: "",
+        recipientRole: "COMPANY",
     });
 
     const [locations] = useState([
@@ -143,9 +144,36 @@ const Companies = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                setReviews(data['content'])
+                //setReviews(data['content'])
+                fetchSenders(data['content']);
             })
             .catch((error) => {console.error("Error removing from reviews:", error)})
+    }
+
+    const fetchSenders = async (reviewList) => {
+        try{
+            const promises = reviewList.map((review) =>
+                fetch(`${baseUrl}/${review.senderRole.toLowerCase()}/${review.senderId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => ({
+                        ...review,
+                        senderName: review.senderRole === "UNIVERSITY"
+                            ? data.name
+                            : `${data.firstName} ${data.lastName}`,
+                    }))
+            );
+            const updatedReviews = await Promise.all(promises);
+            setReviews(updatedReviews);
+        }
+        catch (error) {
+            console.error("Error fetching sender information:", error);
+        }
     }
 
 
@@ -321,7 +349,7 @@ const Companies = () => {
                                         {reviews.map((review) => (
                                             <div key={review.id} className="review-item">
                                                 <div className="candidate-info">
-                                                    <p><strong>Sender Id:</strong> {review.senderId}</p>
+                                                    <p><strong>Sender:</strong> {review.senderName}</p>
                                                     <p className="review-text">{review.reviewText}</p>
                                                     <p><strong>Rating: </strong> {review.rating} / 5</p>
                                                 </div>
@@ -338,15 +366,6 @@ const Companies = () => {
                                                 value={review.reviewText}
                                                 onChange={handleReview}
                                             />
-                                            {/*<input*/}
-                                            {/*    type="number"*/}
-                                            {/*    name="rating"*/}
-                                            {/*    placeholder="Rating (1-5)"*/}
-                                            {/*    min="1"*/}
-                                            {/*    max="5"*/}
-                                            {/*    value={review.rating}*/}
-                                            {/*    onChange={handleReview}*/}
-                                            {/*/>*/}
                                             <StarRating
                                                 rating={review.rating}
                                                 onRatingChange={(value) =>

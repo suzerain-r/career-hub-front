@@ -43,6 +43,7 @@ const Candidates = () => {
         senderId: decodedToken['user-id'],
         reviewText: "",
         rating: "",
+        recipientRole: "STUDENT",
     });
 
 
@@ -263,11 +264,36 @@ const Candidates = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                setReviews(data['content'])
+                //setReviews(data['content']);
+                fetchSenders(data['content']);
             })
             .catch((error) => {console.error("Error removing from reviews:", error)})
     }
 
+
+    const fetchSenders = async (reviewList) => {
+        try{
+            const promises = reviewList.map((review) =>
+                fetch(`${baseUrl}/${review.senderRole.toLowerCase()}/${review.senderId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => ({
+                        ...review,
+                        senderName: data.name,
+                    }))
+            );
+            const updatedReviews = await Promise.all(promises);
+            setReviews(updatedReviews);
+        }
+        catch (error) {
+            console.error("Error fetching sender information:", error);
+        }
+    }
 
 
     const addReview = () => {
@@ -456,7 +482,7 @@ const Candidates = () => {
                                         {reviews.map((review) => (
                                             <div key={review.id} className="review-item">
                                                 <div className="candidate-info">
-                                                    <p><strong>Sender Id:</strong> {review.senderId}</p>
+                                                    <p><strong>Sender:</strong> {review.senderName}</p>
                                                     <p className="review-text">{review.reviewText}</p>
                                                     <p><strong>Rating: </strong> {review.rating} / 5</p>
                                                 </div>
