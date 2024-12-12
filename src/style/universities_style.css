@@ -32,7 +32,7 @@ body {
     border-radius: 10px;
     margin-right: 1%;
     border: 1px solid #ddd;
-    height: 605px;
+    height: 600px;
 }
 
 .university-sidebar-filters h4 {
@@ -360,6 +360,7 @@ body {
 .candidate-info p {
     margin: 4px 0;
     font-size: 14px;
+    width: 125%;
 }
 
 .review-text {

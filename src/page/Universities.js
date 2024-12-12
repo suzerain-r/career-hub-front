@@ -362,15 +362,6 @@ const Universities = () => {
                                                 value={review.reviewText}
                                                 onChange={handleReview}
                                             />
-                                            {/*<input*/}
-                                            {/*    type="number"*/}
-                                            {/*    name="rating"*/}
-                                            {/*    placeholder="Rating (1-5)"*/}
-                                            {/*    min="1"*/}
-                                            {/*    max="5"*/}
-                                            {/*    value={review.rating}*/}
-                                            {/*    onChange={handleReview}*/}
-                                            {/*/>*/}
                                             <StarRating
                                                 rating={review.rating}
                                                 onRatingChange={(value) =>
