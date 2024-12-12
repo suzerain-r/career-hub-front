@@ -166,8 +166,7 @@ const Universities = () => {
         })
             .then((response) => {
                 if (response.ok) {
-                    fetchReviews(selectedUniversity.ownerId)
-                    alert("Review saved successfully!");
+                    fetchReviews(selectedUniversity.ownerId);
                 } else {
                     alert("Error saving review!");
                 }
@@ -265,6 +264,7 @@ const Universities = () => {
                                 <img
                                     src={universityIcon}
                                     className="company_logo"
+                                    alt={""}
                                 />
                             </div>
                             <div className="card-right-section">
@@ -326,6 +326,7 @@ const Universities = () => {
                             <img
                                 src={universityIcon}
                                 className="university_logo"
+                                alt={""}
                             />
                             <div className="header-info">
                                 <h2>{selectedUniversity.name}</h2>
@@ -377,6 +378,7 @@ const Universities = () => {
                                                 onClick={() => {
                                                     addReview();
                                                     fetchReviews(selectedUniversity.ownerId);
+                                                    setReview({ reviewText: '', rating: 0 });
                                                 }}
                                             >
                                                 Send
@@ -392,6 +394,7 @@ const Universities = () => {
                                     <img
                                         src={websiteIcon}
                                         className="icon"
+                                        alt={""}
                                     />
                                     <div className="contact-item-info">
                                         <p className="label">WEBSITE</p>
@@ -403,6 +406,7 @@ const Universities = () => {
                                     <img
                                         src={locationIcon}
                                         className="icon"
+                                        alt={""}
                                     />
                                     <div className="contact-item-info">
                                         <p className="label">LOCATION</p>
@@ -413,6 +417,7 @@ const Universities = () => {
                                     <img
                                         src={phoneIcon}
                                         className="icon"
+                                        alt={""}
                                     />
                                     <div className="contact-item-info">
                                         <p className="label">PHONE</p>
@@ -423,6 +428,7 @@ const Universities = () => {
                                     <img
                                         src={emailIcon}
                                         className="icon"
+                                        alt={""}
                                     />
                                     <div className="contact-item-info">
                                         <p className="label">EMAIL ADDRESS</p>

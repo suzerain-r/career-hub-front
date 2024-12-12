@@ -94,6 +94,9 @@ const UniversityProfile = () => {
                             onChange={handleChange}
                             disabled={!isEditing}
                         >
+                            <option value="" disabled>
+                                Select the type
+                            </option>
                             <option value="PRIVATE">Private</option>
                             <option value="STATE">State</option>
                         </select>
@@ -184,85 +187,6 @@ const UniversityProfile = () => {
                 </div>
             </div>
 
-            {/*<h2>University Profile</h2>*/}
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        type="text"*/}
-            {/*        name="name"*/}
-            {/*        placeholder="University Name"*/}
-            {/*        value={profile.name}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled={!isEditing}*/}
-            {/*    />*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    <select*/}
-            {/*        name="type"*/}
-            {/*        value={profile.type}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled={!isEditing}*/}
-            {/*    >*/}
-            {/*        <option value="PRIVATE">Private</option>*/}
-            {/*        <option value="STATE">State</option>*/}
-            {/*    </select>*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        type="email"*/}
-            {/*        name="email"*/}
-            {/*        placeholder="Email Address"*/}
-            {/*        value={profile.email}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled*/}
-            {/*    />*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        type="text"*/}
-            {/*        name="contactPhone"*/}
-            {/*        placeholder="Contact Phone"*/}
-            {/*        value={profile.contactPhone}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled={!isEditing}*/}
-            {/*    />*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        type="text"*/}
-            {/*        name="location"*/}
-            {/*        placeholder="Location"*/}
-            {/*        value={profile.location}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled={!isEditing}*/}
-            {/*    />*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        type="number"*/}
-            {/*        name="establishedYear"*/}
-            {/*        placeholder="Year of Establishment"*/}
-            {/*        value={profile.establishedYear}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled={!isEditing}*/}
-            {/*    />*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        type="text"*/}
-            {/*        name="website"*/}
-            {/*        placeholder="Website"*/}
-            {/*        value={profile.website}*/}
-            {/*        onChange={handleChange}*/}
-            {/*        disabled={!isEditing}*/}
-            {/*    />*/}
-            {/*</div>*/}
-            {/*{isEditing ? (*/}
-            {/*    <button onClick={handleSave}>Save Changes</button>*/}
-            {/*) : (*/}
-            {/*    <button onClick={() => setIsEditing(true)} className="edit">*/}
-            {/*        Edit Profile*/}
-            {/*    </button>*/}
-            {/*)}*/}
         </div>
     );
 };

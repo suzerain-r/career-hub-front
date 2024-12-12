@@ -51,7 +51,7 @@ const CreateStudent = () => {
         <div className="auth_container">
             <header className="header">
                 <div className="logo_container">
-                    <img src={logo} className="header_logo"></img>
+                    <img src={logo} className="header_logo" alt={""}></img>
                     <div className="header_logo_text">CareerHub</div>
                 </div>
             </header>
@@ -96,7 +96,7 @@ const CreateStudent = () => {
                     <img
                         src={fonImage}
                         className="fonImage"
-                    />
+                     alt={""}/>
                 </div>
             </main>
         </div>

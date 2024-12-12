@@ -190,8 +190,6 @@ const Companies = () => {
             .then((response) => {
                 if (response.ok) {
                     fetchReviews(selectedCompany.ownerId)
-                    alert("Review saved successfully!");
-
                 } else {
                     alert("Error saving review!");
                 }
@@ -268,7 +266,7 @@ const Companies = () => {
                                     <img
                                         src={companyIcon}
                                         className="company_logo"
-                                    />
+                                     alt={""}/>
                                 </div>
                                 <div className="card-right-section">
                                     <div className="company-info">
@@ -329,7 +327,7 @@ const Companies = () => {
                             <img
                                 src={companyIcon}
                                 className="company_logo"
-                            />
+                             alt={""}/>
                             <div className="header-info">
                                 <h2>{selectedCompany.name}</h2>
                                 <p><strong>Type:</strong> {selectedCompany.type}</p>
@@ -381,6 +379,7 @@ const Companies = () => {
                                                 onClick={() => {
                                                     addReview();
                                                     fetchReviews(selectedCompany.ownerId);
+                                                    setReview({ reviewText: '', rating: 0 });
                                                 }}
                                             >
                                                 Send
@@ -396,7 +395,7 @@ const Companies = () => {
                                     <img
                                         src={websiteIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">WEBSITE</p>
                                         <p><a href={selectedCompany.website} target="_blank"
@@ -407,7 +406,7 @@ const Companies = () => {
                                     <img
                                         src={locationIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">LOCATION</p>
                                         <p>{selectedCompany.location}</p>
@@ -417,7 +416,7 @@ const Companies = () => {
                                     <img
                                         src={phoneIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">PHONE</p>
                                         <p>{selectedCompany.contactPhone}</p>
@@ -427,7 +426,7 @@ const Companies = () => {
                                     <img
                                         src={emailIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">EMAIL ADDRESS</p>
                                         <p><a href={selectedCompany.email}>{selectedCompany.email}</a></p>

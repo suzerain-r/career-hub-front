@@ -144,9 +144,9 @@ const StudentProfile = () => {
                         <label>Contact Phone</label>
                         <input
                             type="text"
-                            name="contactPhone"
+                            name="phoneNumber"
                             placeholder="Contact Phone"
-                            value={profile.contactPhone}
+                            value={profile.phoneNumber}
                             onChange={handleChange}
                             disabled={!isEditing}
                         />
@@ -159,6 +159,9 @@ const StudentProfile = () => {
                             onChange={handleChange}
                             disabled={!isEditing}
                         >
+                            <option value="" disabled>
+                                Select the degree
+                            </option>
                             <option value="BACHELOR">Bachelor</option>
                             <option value="MASTER">Master</option>
                             <option value="DOCTORATE">Doctorate</option>

@@ -178,6 +178,9 @@ const CompanyProfile = () => {
                                 onChange={handleChange}
                                 disabled={!isEditing}
                             >
+                                <option value="" disabled>
+                                    Select the type
+                                </option>
                                 <option value="PRIVATE">Private</option>
                                 <option value="STATE">State</option>
                             </select>

@@ -36,7 +36,6 @@ const Candidates = () => {
     const [pageSize] = useState(5);
     const [favorites, setFavorites] = useState([]);
     const [reviews, setReviews] = useState([]);
-    //const [company, setCompany] = useState([]);
     const [university, setUniversity] = useState([])
     const [review, setReview] = useState({
         recipientId: "",
@@ -186,28 +185,6 @@ const Candidates = () => {
             .catch((error) => console.error("Error fetching university:", error));
     }
 
-    // const fetchCompany = (id) => {
-    //     fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`,
-    //             'Content-Type': 'application/json',
-    //         }
-    //     })
-    //         .then((response) => response.json())
-    //         .then(() => {
-    //             return fetch(`${baseUrl}/company/${id}`, {
-    //                 method: 'GET',
-    //                 headers: {
-    //                     'Authorization': `Bearer ${token}`,
-    //                     'Content-Type': 'application/json',
-    //                 }
-    //             });
-    //         })
-    //         .then((response) => response.json())
-    //         .then((data) => setCompany(data))
-    //         .catch((error) => console.error("Error fetching company:", error));
-    // }
 
 
     const addFavorite = (id) => {
@@ -265,7 +242,7 @@ const Candidates = () => {
             .then((response) => response.json())
             .then((data) => {
                 //setReviews(data['content']);
-                fetchSenders(data['content']);
+                fetchSenders(data['content']).then();
             })
             .catch((error) => {console.error("Error removing from reviews:", error)})
     }
@@ -308,7 +285,6 @@ const Candidates = () => {
             .then((response) => {
                 if (response.ok) {
                     fetchReviews(selectedStudent.ownerId)
-                    alert("Review saved successfully!");
                 } else {
                     alert("Error saving review!");
                 }
@@ -389,7 +365,7 @@ const Candidates = () => {
                                     <img
                                         src={candidateIcon}
                                         className="company_logo"
-                                    />
+                                     alt={""}/>
                                 </div>
 
                                 <div className="card-right-section">
@@ -406,8 +382,8 @@ const Candidates = () => {
                                                 aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
                                             >
                                                 {isFavorite(student.ownerId) ?
-                                                    <img src={favourite_active}></img> :
-                                                    <img src={favourite_not_active}></img>
+                                                    <img src={favourite_active} alt={""}></img> :
+                                                    <img src={favourite_not_active} alt={""}></img>
                                                 }
                                             </button>
                                         )}
@@ -463,7 +439,7 @@ const Candidates = () => {
                             <img
                                 src={candidateIcon}
                                 className="candidate-logo"
-                            />
+                             alt={""}/>
                             <div className="header-info">
                                 <h2>{selectedStudent.name}</h2>
                             </div>
@@ -499,15 +475,6 @@ const Candidates = () => {
                                                 value={review.reviewText}
                                                 onChange={handleReview}
                                             />
-                                            {/*<input*/}
-                                            {/*    type="number"*/}
-                                            {/*    name="rating"*/}
-                                            {/*    placeholder="Rating (1-5)"*/}
-                                            {/*    min="1"*/}
-                                            {/*    max="5"*/}
-                                            {/*    value={review.rating}*/}
-                                            {/*    onChange={handleReview}*/}
-                                            {/*/>*/}
                                             <StarRating
                                                 rating={review.rating}
                                                 onRatingChange={(value) =>
@@ -523,6 +490,7 @@ const Candidates = () => {
                                                 onClick={() => {
                                                     addReview();
                                                     fetchReviews(selectedStudent.ownerId);
+                                                    setReview({ reviewText: '', rating: 0 });
                                                 }}
                                             >
                                                 Send
@@ -538,7 +506,7 @@ const Candidates = () => {
                                     <img
                                         src={universityIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">University</p>
                                         <p>{university.name}</p>
@@ -548,7 +516,7 @@ const Candidates = () => {
                                     <img
                                         src={phoneIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">PHONE</p>
                                         <p>{selectedStudent.phoneNumber}</p>
@@ -558,7 +526,7 @@ const Candidates = () => {
                                     <img
                                         src={emailIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">EMAIL ADDRESS</p>
                                         <p><a href={selectedStudent.email}>{selectedStudent.email}</a></p>

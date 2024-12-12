@@ -6,7 +6,6 @@ import companyIcon from '../resources/company-icon.svg';
 import candidateIcon from '../resources/candidate-icon.svg';
 import Header from "./Header";
 import React, {useEffect, useState} from "react";
-import StarRating from "./StarRating";
 import websiteIcon from "../resources/website-icon.svg";
 import locationIcon from "../resources/modal-location-icon.svg";
 import phoneIcon from "../resources/phone-icon.svg";
@@ -75,7 +74,7 @@ const Home = () => {
                 //     university.website !== null
                 // );
                 //setUniversities(data['content']);
-                fetchAverageRatings(data['content']);
+                fetchAverageRatings(data['content']).then();
                 setCountUniversities(data['totalElements']);
             })
             .catch((error) => {
@@ -145,14 +144,14 @@ const Home = () => {
             <main className="home_content">
                 <section className="home_search">
                     <div className="steps-container">
-                        <img src={mainInfo} className="mainInfo"></img>
+                        <img src={mainInfo} className="mainInfo" alt={""}></img>
                     </div>
                     <div className="count_container">
                         <div className="count_item">
                             <img
                                 src={companyIcon}
                                 className="company_logo"
-                            />
+                             alt={""}/>
                             <div className="count_info">
                                 <h2>{countCompanies}</h2>
                                 <p>Companies</p>
@@ -163,7 +162,7 @@ const Home = () => {
                             <img
                                 src={universityIcon}
                                 className="university_logo"
-                            />
+                             alt={""}/>
                             <div className="count_info">
                                 <h2>{countUniversities}</h2>
                                 <p>Universities</p>
@@ -174,7 +173,7 @@ const Home = () => {
                             <img
                                 src={candidateIcon}
                                 className="candidate_logo"
-                            />
+                             alt={""}/>
                             <div className="count_info">
                                 <h2>{countStudents}</h2>
                                 <p>Candidates</p>
@@ -186,7 +185,7 @@ const Home = () => {
 
                 <section className="how-work-section">
                     <div className="steps-container">
-                        <img src={howWorkInfo} className="howWorkInfo"></img>
+                        <img src={howWorkInfo} className="howWorkInfo" alt={""}></img>
                     </div>
                 </section>
 
@@ -266,7 +265,7 @@ const Home = () => {
                             <img
                                 src={universityIcon}
                                 className="university_logo"
-                            />
+                             alt={""}/>
                             <div className="header-info">
                                 <h2>{selectedUniversity.name}</h2>
                                 <p><strong>Type:</strong> {selectedUniversity.type}</p>
@@ -287,7 +286,7 @@ const Home = () => {
                                     <img
                                         src={websiteIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">WEBSITE</p>
                                         <p><a href={selectedUniversity.website} target="_blank"
@@ -298,7 +297,7 @@ const Home = () => {
                                     <img
                                         src={locationIcon}
                                         className="icon"
-                                    />
+                                     alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">LOCATION</p>
                                         <p>{selectedUniversity.location}</p>
@@ -308,7 +307,7 @@ const Home = () => {
                                     <img
                                         src={phoneIcon}
                                         className="icon"
-                                    />
+                                        alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">PHONE</p>
                                         <p>{selectedUniversity.contactPhone}</p>
@@ -318,7 +317,7 @@ const Home = () => {
                                     <img
                                         src={emailIcon}
                                         className="icon"
-                                    />
+                                        alt={""}/>
                                     <div className="contact-item-info">
                                         <p className="label">EMAIL ADDRESS</p>
                                         <p><a href={selectedUniversity.email}>{selectedUniversity.email}</a></p>
