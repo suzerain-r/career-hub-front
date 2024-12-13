@@ -150,7 +150,7 @@ const Universities = () => {
             .then((data) => {
                 console.log(data['content'])
                 //setReviews(data['content']);
-                fetchSenders(data['content']);
+                fetchSenders(data['content']).then();
             })
             .catch((error) => {console.error("Error removing from reviews:", error)})
     }

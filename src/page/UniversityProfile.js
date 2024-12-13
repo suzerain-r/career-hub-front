@@ -397,6 +397,13 @@ const UniversityProfile = () => {
                                                 <p><a href={selectedStudent.email}>{selectedStudent.email}</a></p>
                                             </div>
                                         </div>
+                                        <div className="contact-item">
+                                            <strong>G</strong>
+                                            <div className="contact-item-info">
+                                                <p className="label">GPA</p>
+                                                <p><a>{selectedStudent.gpa}</a></p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

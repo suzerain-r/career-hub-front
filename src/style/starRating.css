@@ -1,6 +1,6 @@
 .star-rating {
     display: flex;
-    direction: row;
+    /*direction: row;*/
     gap: 5px;
 }
 

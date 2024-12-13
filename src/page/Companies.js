@@ -41,15 +41,13 @@ const Companies = () => {
     });
 
     const [locations] = useState([
-        "Astana", "Almaty"
+        "Astana", "Almaty", "California", "Washington", "Pennsylvania", "Moscow"
     ]);
-
 
     const queryParams = {
         page: currentPage - 1,
         size: pageSize,
     }
-
     if (filters.type) queryParams.type = filters.type;
 
     if(searchFilters.location !== 'All') queryParams.location = searchFilters.location;
@@ -145,7 +143,7 @@ const Companies = () => {
             .then((response) => response.json())
             .then((data) => {
                 //setReviews(data['content'])
-                fetchSenders(data['content']);
+                fetchSenders(data['content']).then();
             })
             .catch((error) => {console.error("Error removing from reviews:", error)})
     }
