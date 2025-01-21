@@ -1,0 +1,148 @@
+/* Хедер */
+.common_header {
+    display: flex;
+    justify-content: space-between;;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 10px 20px;
+    z-index: 10;
+}
+
+.header_logo_text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: black;
+}
+
+.header_logo {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+.header_logo_container {
+    display: flex;
+    align-items: center;
+    margin-left: 140px;
+}
+
+.header_nav {
+    display: flex;
+    gap: 50px;
+
+}
+
+.header_nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+
+
+.header_nav a:hover {
+    color: #007bff;
+}
+
+.header_nav a.active {
+    color: #007bff;
+}
+
+.header_auth {
+    display: flex;
+    gap: 10px;
+    margin-right: 140px;
+}
+
+
+
+
+.header_sign_in {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    color: #007bff;
+    transition: all 0.3s ease;
+}
+
+
+.header_sign_in:hover{
+    opacity: 0.8;
+}
+
+
+/* Профиль */
+.header_profile_icon {
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    background-color: transparent;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.header_profile_icon:hover {
+    transform: scale(1.1);
+}
+
+
+/* Стили модального окна */
+.header_profile_modal {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    padding: 15px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.header_profile_modal_button {
+    width: 100%;
+    color: #007bff;
+    background-color: transparent;
+    border: 1px solid #007bff;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.header_profile_modal_logout_button {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    background-color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    color: #fff;
+}
+
+.header_profile_modal_button:hover,
+.header_profile_modal_logout_button:hover {
+    opacity: 0.8;
+}

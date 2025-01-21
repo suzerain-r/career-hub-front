@@ -1,0 +1,21 @@
+.about_us_textarea {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60%!important;
+}
+
+.about_us_textarea textarea {
+    background-color: #FFFFFF;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    height: 150px;
+}
+
+
+.about_us_textarea textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}

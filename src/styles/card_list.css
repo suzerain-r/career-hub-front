@@ -1,0 +1,107 @@
+.card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 57%;
+
+}
+
+.card {
+    display: flex;
+    /*justify-content: space-between;*/
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+.card:hover {
+    border: 1px solid #007bff;
+}
+
+.card:hover .view-profile-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.card-logo {
+    width: 70px;
+    height: 70px;
+    margin-right: 16px;
+    object-fit: contain;
+}
+
+.location_icon {
+    width: 16px;
+    height: 19px;
+    background: url('../assets/location-icon.svg') no-repeat center center;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.card-right-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.card-info {
+    max-width: 80%;
+}
+
+.card-info h3 {
+    margin: 0 0 0.5rem;
+    color: #007bff;
+}
+
+.card-info p {
+    font-size: 0.9rem;
+    color: #777;
+    display: flex;
+    margin: 0;
+}
+
+.location_icon {
+    width: 16px;
+    height: 19px;
+    background: url('../assets/location-icon.svg') no-repeat center center;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.location_name {
+    margin-top: 2px;
+}
+
+.view-profile-button {
+    background-color: #E7F0FA;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #007bff;
+}
+
+.view-profile-button:hover {
+    opacity: 0.8;
+}
+
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-favorite {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 1.2rem;
+}
+
+.card-favorite:hover {
+    opacity: 0.8;
+}
