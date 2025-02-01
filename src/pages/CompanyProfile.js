@@ -519,7 +519,7 @@ const CompanyProfile = () => {
                                             )}
                                             <button className="candidate-view-profile" onClick={() => {
                                                 fetchReviews(student.ownerId);
-                                                setReview(prevState => ({
+                                                setReviews(prevState => ({
                                                     ...prevState,
                                                     recipientId: student.ownerId,
                                                 }));

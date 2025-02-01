@@ -3,50 +3,64 @@ import '../styles/auth_style.css';
 import AuthFonImage from "../components/AuthFonImage";
 import AuthInput from "../components/AuthInput";
 import AuthHeader from "../components/AuthHeader";
+import {useRegistration} from "../hooks/useRegistration";
 
 const CreateStudent = () => {
 
+    const {
+        role,
+        setRole,
+        username,
+        setUsername,
+        email,
+        setEmail,
+        password,
+        setPassword,
+        handleSubmit,
+        error
+    } = useRegistration();
 
+    setRole("Student");
 
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const baseUrl = "http://localhost:8080/auth";
-        const url = `${baseUrl}/student/registration`;
-
-        const token = localStorage.getItem("authToken");
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    role: "STUDENT",
-                    username,
-                    email,
-                    password,
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Registration successful', data);
-                alert('Registration successful');
-            } else {
-                console.log('Registration failed', data.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+    // const [username, setUsername] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');
+    //
+    //
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //
+    //     const baseUrl = "http://localhost:8080/auth";
+    //     const url = `${baseUrl}/student/registration`;
+    //
+    //     const token = localStorage.getItem("authToken");
+    //
+    //     try {
+    //         const response = await fetch(url, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 role: "STUDENT",
+    //                 username,
+    //                 email,
+    //                 password,
+    //             }),
+    //         });
+    //
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             console.log('Registration successful', data);
+    //             alert('Registration successful');
+    //         } else {
+    //             console.log('Registration failed', data.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // };
 
     return (
         <div className="auth_container">
