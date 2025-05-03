@@ -1,17 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Candidates from "./pages/Candidates";
-import Universities from "./pages/Universities";
-import Companies from "./pages/Companies";
-import StudentProfile from "./pages/StudentProfile";
-import UniversityProfile from "./pages/UniversityProfile";
-import CompanyProfile from "./pages/CompanyProfile";
-import Admin from "./pages/Admin";
-import CreateStudent from "./pages/CreateStudent";
+import Home from './pages/main/Home';
+import SignIn from './pages/auth/SignIn';
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import Candidates from "./pages/main/Candidates";
+import Universities from "./pages/main/Universities";
+import Companies from "./pages/main/Companies";
+import StudentProfile from "./pages/profile/StudentProfile";
+import UniversityProfile from "./pages/profile/UniversityProfile";
+import CompanyProfile from "./pages/profile/CompanyProfile";
+import Admin from "./pages/auth/Admin";
+import CreateStudent from "./pages/auth/CreateStudent";
 
 
 const App = () => {

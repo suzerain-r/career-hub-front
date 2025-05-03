@@ -3,16 +3,16 @@ import '../styles/home_style.css';
 import universityIcon from "../assets/university-icon.svg";
 
 
-const HomeCount = ({ count }) => {
+const HomeCount = ({ logo, count, type }) => {
     return (
         <div className="count_item">
             <img
-                src={universityIcon}
+                src={logo}
                 className="university_logo"
                 alt={""}/>
             <div className="count_info">
                 <h2>{count}</h2>
-                <p>Universities</p>
+                <p>{type}</p>
             </div>
         </div>
     )

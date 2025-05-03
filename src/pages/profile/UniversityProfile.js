@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
-import "../styles/university_profile_style.css";
-import {jwtDecode} from "jwt-decode";
-import Header from "../components/Header";
-import candidateIcon from "../assets/candidate-icon.svg";
-import universityIcon from "../assets/university-icon.svg";
-import phoneIcon from "../assets/phone-icon.svg";
-import emailIcon from "../assets/email-icon.svg";
-import ProfileInput from "../components/ProfileInput";
-import AboutUsTextArea from "../components/AboutUsTextArea";
+import "../../styles/university_profile_style.css";
+import "../../styles/card_list.css";
+import "../../styles/modal.css";
+import Header from "../../components/Header";
+import candidateIcon from "../../assets/candidate-icon.svg";
+import universityIcon from "../../assets/university-icon.svg";
+import phoneIcon from "../../assets/phone-icon.svg";
+import emailIcon from "../../assets/email-icon.svg";
+import ProfileInput from "../../components/ProfileInput";
+import AboutUsTextArea from "../../components/AboutUsTextArea";
+import {getIdFromToken, getRoleFromToken} from "../../utils/jwtDecode";
+import {
+    fetchReviews, fetchSenders,
+    fetchStudentsOfUniversity,
+    fetchUniversity,
+    updateUniversityProfile
+} from "../../services/apiService";
 
 const UniversityProfile = () => {
 
+    const userId = getIdFromToken();
+    const userRole = getRoleFromToken();
 
-    const baseUrl = "http://localhost:8080";
-
-    const token = localStorage.getItem("authToken");
-    const decodedToken = jwtDecode(token);
     const [reviews, setReviews] = useState([]);
     const [currentTab, setCurrentTab] = useState("profile");
     const [students, setStudents] = useState([]);
@@ -29,6 +35,7 @@ const UniversityProfile = () => {
         location: "",
         establishedYear: "",
         website: "",
+        aboutUs: "",
     });
 
 
@@ -37,32 +44,30 @@ const UniversityProfile = () => {
 
 
     useEffect(() => {
-        fetch(`${baseUrl}/university/${decodedToken['user-id']}`,{
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
+
+        fetchUniversity(userId).then((data) => {
+            setProfile({
+                ownerId: data.ownerId || "",
+                name: data.name || "",
+                type: data.type || "",
+                email: data.email || "",
+                contactPhone: data.contactPhone || "",
+                location: data.location || "",
+                establishedYear: data.establishedYear || "",
+                website: data.website || "",
+                aboutUs: data.aboutUs || "",
+            });
         })
-            .then((response) => response.json())
-            .then((data) => setProfile(data))
             .catch((error) => console.error("Error fetching profile data:", error));
 
 
-        fetch(`${baseUrl}/student/search?universityId=${decodedToken['user-id']}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        })
 
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data['content']);
-                setStudents(data['content'])
-            })
+        fetchStudentsOfUniversity(userId).then((data) => {
+            console.log(data['content']);
+            setStudents(data['content']);
+        })
             .catch((error) => console.error("Error fetching students:", error));
+
     }, []);
 
     const handleChange = (e) => {
@@ -74,64 +79,19 @@ const UniversityProfile = () => {
     };
 
     const handleSave = () => {
-        fetch(`${baseUrl}/university/update/${decodedToken['user-id']}`, {
-            method: "PUT",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },//token нужно в header
-            body: JSON.stringify(profile),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    alert("Profile saved successfully!");
-                    setIsEditing(false);
-                } else {
-                    alert("Error saving profile.");
-                }
-            })
-            .catch((error) => console.error("Error saving profile:", error));
+
+        const result = updateUniversityProfile(profile);
+
+        if (result) {
+            alert("Profile saved successfully!");
+            setIsEditing(false);
+        } else {
+            alert("Error saving profile.");
+        }
+
     };
 
-    const fetchReviews = (id) => {
-        fetch(`${baseUrl}/review/getAll/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                //setReviews(data['content']);
-                fetchSenders(data['content']).then();
-            })
-            .catch((error) => {console.error("Error removing from reviews:", error)})
-    }
 
-    const fetchSenders = async (reviewList) => {
-        try{
-            const promises = reviewList.map((review) =>
-                fetch(`${baseUrl}/${review.senderRole.toLowerCase()}/${review.senderId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => ({
-                        ...review,
-                        senderName: data.name,
-                    }))
-            );
-            const updatedReviews = await Promise.all(promises);
-            setReviews(updatedReviews);
-        }
-        catch (error) {
-            console.error("Error fetching sender information:", error);
-        }
-    }
 
 
     const closeModal = () => {
@@ -174,24 +134,13 @@ const UniversityProfile = () => {
                         <ProfileInput
                             title="University Name"
                             type="text"
-                            name="universityName"
+                            name="name"
                             placeholder="University Name"
                             value={profile.name}
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>University Name</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        id="universityName"*/}
-                        {/*        name="name"*/}
-                        {/*        placeholder="University Name"*/}
-                        {/*        value={profile.name}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
 
                         <div className="input-container">
                             <label>Type</label>
@@ -220,17 +169,7 @@ const UniversityProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Email Address</label>*/}
-                        {/*    <input*/}
-                        {/*        type="email"*/}
-                        {/*        name="email"*/}
-                        {/*        placeholder="Email Address"*/}
-                        {/*        value={profile.email}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                         <ProfileInput
                             title="Location"
                             type="text"
@@ -240,17 +179,7 @@ const UniversityProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Location</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="location"*/}
-                        {/*        placeholder="Location"*/}
-                        {/*        value={profile.location}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                     </div>
 
                     <div className="row3">
@@ -263,17 +192,7 @@ const UniversityProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Contact Phone</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="contactPhone"*/}
-                        {/*        placeholder="Contact Phone"*/}
-                        {/*        value={profile.contactPhone}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                         <ProfileInput
                             title="Website"
                             type="text"
@@ -283,17 +202,7 @@ const UniversityProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Website</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="website"*/}
-                        {/*        placeholder="Website"*/}
-                        {/*        value={profile.website}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                     </div>
 
                     <div className="row-single">
@@ -311,20 +220,11 @@ const UniversityProfile = () => {
                     </div>
 
                     <AboutUsTextArea
-                        profile={profile}
+                        value={profile.aboutUs}
                         handleChange={handleChange}
                         isEditing={isEditing}
                     />
 
-                    {/*<div className="input-container row5">*/}
-                    {/*    <label>Information about university</label>*/}
-                    {/*    <textarea name="aboutUs"*/}
-                    {/*              placeholder=""*/}
-                    {/*              value={profile.aboutUs}*/}
-                    {/*              onChange={handleChange}*/}
-                    {/*              disabled={!isEditing}>*/}
-                    {/*    </textarea>*/}
-                    {/*</div>*/}
                     <div className="button-container">
                         {isEditing ? (
                             <button className="save-button" onClick={handleSave}>Save Changes</button>
@@ -342,10 +242,10 @@ const UniversityProfile = () => {
             {currentTab === "students" && (
                 <div className="favourites-tab">
                     <h2>Students</h2>
-                    <div className="candidate-list">
+                    <div className="card-list">
                         {students
                             .map((student) => (
-                                <div key={student.id} className="candidate-card">
+                                <div key={student.id} className="card">
                                     <div>
                                     <img
                                             src={candidateIcon}
@@ -359,14 +259,11 @@ const UniversityProfile = () => {
                                             <p>Degree: {student.degree}</p>
                                         </div>
 
-                                        <div className="candidate-actions">
-                                            <button className="candidate-view-profile" onClick={() => {
-                                                fetchReviews(student.ownerId);
-                                                // setReview(prevState => ({
-                                                //     ...prevState,
-                                                //     recipientId: student.ownerId,
-                                                // }));
-                                                //fetchUniversity(student.universityId);
+                                        <div className="card-actions">
+                                            <button className="view-profile-button" onClick={() => {
+                                                fetchReviews(student.ownerId).then((data) => {
+                                                    fetchSenders(data['content']).then((data) => {setReviews(data)})
+                                                });
                                                 openModal(student)
                                             }
                                             }
@@ -381,9 +278,9 @@ const UniversityProfile = () => {
                             ))}
                     </div>
                     {selectedStudent && (
-                        <div className="candidate-modal-overlay" onClick={closeModal}>
-                            <div className="candidate-modal-content" onClick={(e) => e.stopPropagation()}>
-                                <button className="candidate-modal-close" onClick={closeModal}>×</button>
+                        <div className="modal-overlay" onClick={closeModal}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <button className="modal-close" onClick={closeModal}>×</button>
                                 <div className="modal-header">
                                     <img
                                         src={candidateIcon}

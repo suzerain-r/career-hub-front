@@ -68,7 +68,7 @@ const UniversityModal = ({ university, closeModal, reviews, onReviewSubmit, role
                                         className="submit-button"
                                         onClick={() => {
                                             onReviewSubmit();
-                                            fetchReviews(item.ownerId);
+                                            fetchReviews(university.ownerId);
                                             setReview(prevState => ({
                                                 ...prevState,
                                                 reviewText: '', rating: 0

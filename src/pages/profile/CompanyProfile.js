@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react";
-import "../styles/company_profile_style.css";
-import '../styles/candidates_style.css';
-import {jwtDecode} from "jwt-decode";
-import favourite_active from "../assets/favourite_active.svg";
-import favourite_not_active from "../assets/favourite_not_active.svg";
-import Header from "../components/Header";
-import candidateIcon from "../assets/candidate-icon.svg";
-import universityIcon from "../assets/university-icon.svg";
-import phoneIcon from "../assets/phone-icon.svg";
-import emailIcon from "../assets/email-icon.svg";
-import AboutUsTextArea from "../components/AboutUsTextArea";
-import ProfileInput from "../components/ProfileInput";
+import "../../styles/company_profile_style.css";
+import '../../styles/card_list.css';
+import '../../styles/modal.css';
+import favourite_active from "../../assets/favourite_active.svg";
+import favourite_not_active from "../../assets/favourite_not_active.svg";
+import Header from "../../components/Header";
+import candidateIcon from "../../assets/candidate-icon.svg";
+import universityIcon from "../../assets/university-icon.svg";
+import phoneIcon from "../../assets/phone-icon.svg";
+import emailIcon from "../../assets/email-icon.svg";
+import AboutUsTextArea from "../../components/AboutUsTextArea";
+import ProfileInput from "../../components/ProfileInput";
+import {
+    fetchCompany,
+    fetchFavorites,
+    fetchReviews,
+    fetchSenders,
+    fetchStudent, fetchUniversity,
+    togFavorite, updateCompanyProfile
+} from "../../services/apiService";
+import {getIdFromToken, getRoleFromToken} from "../../utils/jwtDecode";
 
 const CompanyProfile = () => {
 
-    const baseUrl = "http://localhost:8080";
-    const token = localStorage.getItem("authToken");
-    const decodedToken = jwtDecode(token);
+    const userId = getIdFromToken();
+    const userRole = getRoleFromToken();
 
     const [profile, setProfile] = useState({
-        aboutUs: "",
         ownerId: "",
         name: "",
         type: "",
@@ -29,6 +36,7 @@ const CompanyProfile = () => {
         industry: "",
         website: "",
         establishedYear: "",
+        aboutUs: "",
     });
     const [favourites, setFavourites] = useState([]);
 
@@ -38,43 +46,41 @@ const CompanyProfile = () => {
     const [currentTab, setCurrentTab] = useState("profile");
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
-    // const [review, setReview] = useState({
-    //     recipientId: "",
-    //     senderId: decodedToken['user-id'],
-    //     reviewText: "",
-    //     rating: "",
-    //     recipientRole: "STUDENT",
-    // });
+
 
 
     useEffect(() => {
-        fetch(`${baseUrl}/company/${decodedToken['user-id']}`,{
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
+
+        fetchCompany(userId).then((data) => {
+            setProfile({
+                ownerId: data.ownerId || "",
+                name: data.name || "",
+                type: data.type || "",
+                email: data.email || "",
+                contactPhone: data.contactPhone || "",
+                location: data.location || "",
+                industry: data.industry || "",
+                establishedYear: data.establishedYear || "",
+                website: data.website || "",
+                aboutUs: data.aboutUs || "",
+            });
         })
-            .then((response) => response.json())
-            .then((data) => setProfile(data))
             .catch((error) => console.error("Error fetching profile data:", error));
+
+
     }, []);
 
 
+
+
     useEffect(() => {
-        fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
+
+        fetchFavorites(userId).then((data) => {
+            setFavourites(data);
         })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                setFavourites(data);
-            })
-            .catch((error) => console.error("Error fetching students:", error))
+            .catch((error) => console.error("Error fetching students:", error));
+
+
     }, []);
 
 
@@ -83,18 +89,8 @@ const CompanyProfile = () => {
         const fetchStudentData = async () => {
             try {
                 const studentRequests = favourites.map((id) =>
-                    fetch(`${baseUrl}/student/${id}`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }).then((response) => {
-                        if (!response.ok) {
-                            throw new Error(`Failed to fetch student with id ${id}`);
-                        }
-                        return response.json();
-                    })
+                    fetchStudent(id)
+
                 );
 
                 const studentData = await Promise.all(studentRequests);
@@ -117,92 +113,15 @@ const CompanyProfile = () => {
     };
 
 
-    const deleteFavorite = (id) => {
-        {decodedToken['user-role'] === "COMPANY" && (
-            fetch(`${baseUrl}/company/favouriteStudent/${decodedToken['user-id']}?studentOwnerId=${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(() => {
-                    setFavourites(prevFavourites => prevFavourites.filter(favId => favId !== id));
-                })
-                .catch((error) => console.error("Error removing from favorites:", error))
-        )}
-    };
 
     const isFavorite = (id) => Array.isArray(favourites) && favourites.includes(id);
 
     const toggleFavorite = (id) => {
-        if (isFavorite(id)) {
-            deleteFavorite(id);
-        }
+        togFavorite(userId, id, isFavorite()).then();
+
     };
 
-    const fetchReviews = (id) => {
-        fetch(`${baseUrl}/review/getAll/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                //setReviews(data['content']);
-                fetchSenders(data['content']).then();
-            })
-            .catch((error) => {console.error("Error removing from reviews:", error)})
-    }
 
-    const fetchSenders = async (reviewList) => {
-        try{
-            const promises = reviewList.map((review) =>
-                fetch(`${baseUrl}/${review.senderRole.toLowerCase()}/${review.senderId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => ({
-                        ...review,
-                        senderName: data.name,
-                    }))
-            );
-            const updatedReviews = await Promise.all(promises);
-            setReviews(updatedReviews);
-        }
-        catch (error) {
-            console.error("Error fetching sender information:", error);
-        }
-    }
-
-    const fetchUniversity = (id) => {
-        fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => response.json())
-            .then(() => {
-                return fetch(`${baseUrl}/university/${id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
-            })
-            .then((response) => response.json())
-            .then((data) => setUniversity(data))
-            .catch((error) => console.error("Error fetching university:", error));
-    }
 
     const openModal = (student) => {
         setSelectedStudent(student);
@@ -213,50 +132,19 @@ const CompanyProfile = () => {
     };
 
     const handleSave = () => {
-        fetch(`${baseUrl}/company/update/${decodedToken['user-id']}`, {
-            method: "PUT",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }, //token
-            body: JSON.stringify(profile),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    alert("Profile saved successfully!");
-                    setIsEditing(false);
-                } else {
-                    alert("Error saving profile.");
-                }
-            })
-            .catch((error) => console.error("Error saving profile:", error));
+
+        const result = updateCompanyProfile(profile);
+
+        if (result) {
+            alert("Profile saved successfully!");
+            setIsEditing(false);
+        } else {
+            alert("Error saving profile.");
+        }
+
     };
 
-    // const addReview = () => {
-    //     fetch(`${baseUrl}/review/add`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`,
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(review),
-    //     })
-    //         .then((response) => {
-    //             if (response.ok) {
-    //                 fetchReviews(selectedStudent.ownerId)
-    //             } else {
-    //                 alert("Error saving review!");
-    //             }
-    //         })
-    // }
-    //
-    // const handleReview = (e) => {
-    //     const { name, value } = e.target;
-    //     setReview((prevProfile) => ({
-    //         ...prevProfile,
-    //         [name]: value,
-    //     }));
-    // }
+
 
     return (
         <div className="company-profile-page">
@@ -287,24 +175,13 @@ const CompanyProfile = () => {
                         <ProfileInput
                             title="Company Name"
                             type="text"
-                            name="companyName"
+                            name="name"
                             placeholder="Company Name"
                             value={profile.name}
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Company Name</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        id="companyName"*/}
-                        {/*        name="name"*/}
-                        {/*        placeholder="Company Name"*/}
-                        {/*        value={profile.name}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                         <div className="input-container">
                             <label>Type</label>
                             <select
@@ -333,17 +210,7 @@ const CompanyProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Email Address</label>*/}
-                        {/*    <input*/}
-                        {/*        type="email"*/}
-                        {/*        name="email"*/}
-                        {/*        placeholder="Email Address"*/}
-                        {/*        value={profile.email}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
 
                         <ProfileInput
                             title="Location"
@@ -354,17 +221,7 @@ const CompanyProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Location</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="location"*/}
-                        {/*        placeholder="Location"*/}
-                        {/*        value={profile.location}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                     </div>
 
                     <div className="row3">
@@ -378,17 +235,7 @@ const CompanyProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Contact Phone</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="contactPhone"*/}
-                        {/*        placeholder="Contact Phone"*/}
-                        {/*        value={profile.contactPhone}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
 
                         <ProfileInput
                             title="Industry"
@@ -399,17 +246,7 @@ const CompanyProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Industry</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="industry"*/}
-                        {/*        placeholder="Industry"*/}
-                        {/*        value={profile.industry}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                     </div>
 
                     <div className="row4">
@@ -423,17 +260,7 @@ const CompanyProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        <div className="input-container">
-                            <label>Website</label>
-                            <input
-                                type="text"
-                                name="website"
-                                placeholder="Website"
-                                value={profile.website}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
-                        </div>
+
 
                         <ProfileInput
                             title="Year of Establishment"
@@ -444,34 +271,15 @@ const CompanyProfile = () => {
                             handleChange={handleChange}
                             isEditing={isEditing}
                         />
-                        {/*<div className="input-container">*/}
-                        {/*    <label>Year of Establishment</label>*/}
-                        {/*    <input*/}
-                        {/*        type="number"*/}
-                        {/*        name="establishedYear"*/}
-                        {/*        placeholder="Year of Establishment"*/}
-                        {/*        value={profile.establishedYear}*/}
-                        {/*        onChange={handleChange}*/}
-                        {/*        disabled={!isEditing}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+
                     </div>
 
                     <AboutUsTextArea
-                        profile={profile}
+                        value={profile.aboutUs}
                         handleChange={handleChange}
                         isEditing={isEditing}
                     />
 
-                    {/*<div className="input-container row5">*/}
-                    {/*    <label>Information about company</label>*/}
-                    {/*    <textarea name="aboutUs"*/}
-                    {/*              placeholder=""*/}
-                    {/*              value={profile.aboutUs}*/}
-                    {/*              onChange={handleChange}*/}
-                    {/*              disabled={!isEditing}>*/}
-                    {/*    </textarea>*/}
-                    {/*</div>*/}
                     <div className="button-container">
                         {isEditing ? (
                             <button className="save-button" onClick={handleSave}>Save Changes</button>
@@ -487,10 +295,10 @@ const CompanyProfile = () => {
             {currentTab === "favourites" && (
                 <div className="favourites-tab" >
                     <h2>Favourites</h2>
-                    <div className="candidate-list">
+                    <div className="card-list">
                         {students
                             .map((student) => (
-                                <div key={student.id} className="candidate-card">
+                                <div key={student.id} className="card">
                                     <div>
                                         <img
                                             src={candidateIcon}
@@ -499,15 +307,15 @@ const CompanyProfile = () => {
                                     </div>
 
                                     <div className="card-right-section">
-                                        <div className="candidate-info">
+                                        <div className="card-info">
                                             <h3>{student.firstName} {student.lastName}</h3>
                                             <p>Degree: {student.degree}</p>
                                         </div>
 
-                                        <div className="candidate-actions">
-                                            {decodedToken['user-role'] === "COMPANY" && (
+                                        <div className="card-actions">
+                                            {userRole === "COMPANY" && (
                                                 <button
-                                                    className="candidate-favorite"
+                                                    className="card-favorite"
                                                     onClick={() => toggleFavorite(student.ownerId)}
                                                     aria-label={isFavorite(student.ownerId) ? "Remove from Favorites" : "Add to Favorites"}
                                                 >
@@ -517,16 +325,16 @@ const CompanyProfile = () => {
                                                     }
                                                 </button>
                                             )}
-                                            <button className="candidate-view-profile" onClick={() => {
-                                                fetchReviews(student.ownerId);
-                                                setReviews(prevState => ({
-                                                    ...prevState,
-                                                    recipientId: student.ownerId,
-                                                }));
-                                                fetchUniversity(student.universityId);
-                                                openModal(student)
-                                            }
-                                            }
+                                            <button className="view-profile-button" onClick={() => {
+                                                fetchReviews(student.ownerId).then((data) => {
+                                                    fetchSenders(data['content']).then((data) => {
+                                                        console.log(data);
+                                                        setReviews(data);
+                                                    });
+                                                });
+                                                fetchUniversity(student.universityId).then((data) => {setUniversity(data)});
+                                                openModal(student);
+                                            }}
                                             >
                                                 View Profile →
                                             </button>
@@ -538,13 +346,12 @@ const CompanyProfile = () => {
                             ))}
                     </div>
                     {selectedStudent && (
-                        <div className="candidate-modal-overlay" onClick={closeModal}>
-                            <div className="candidate-modal-content" onClick={(e) => e.stopPropagation()}>
-                                <button className="candidate-modal-close" onClick={closeModal}>×</button>
+                        <div className="modal-overlay" onClick={closeModal}>
+                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                                <button className="modal-close" onClick={closeModal}>×</button>
                                 <div className="modal-header">
                                     <img
                                         src={candidateIcon}
-                                        className="candidate-logo"
                                         alt={""}/>
                                     <div className="header-info">
                                         <h2>{selectedStudent.name}</h2>

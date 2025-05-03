@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/auth_style.css";
 
-const AuthInput = ({type, value , onChange, placeholder}) => {
+const AuthInput = ({type, value, onChange, placeholder}) => {
 
     return (
         <div className="auth_inputGroup">

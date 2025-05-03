@@ -2,9 +2,10 @@ import React from 'react';
 import '../styles/card_list.css';
 import favourite_active from "../assets/favourite_active.svg";
 import favourite_not_active from "../assets/favourite_not_active.svg";
+import {getRoleFromToken} from "../utils/jwtDecode";
 
 
-const CandidateCardList = ({ students, onViewProfile, decodedToken, candidateIcon, toggleFavorite, isFavorite }) => {
+const CandidateCardList = ({ students, onViewProfile, candidateIcon, toggleFavorite, isFavorite }) => {
     return (
 
         <div className="card-list">
@@ -25,7 +26,7 @@ const CandidateCardList = ({ students, onViewProfile, decodedToken, candidateIco
                         </div>
 
                         <div className="card-actions">
-                            {decodedToken['user-role'] === "COMPANY" && (
+                            {getRoleFromToken() === "COMPANY" && (
                                 <button
                                     className="card-favorite"
                                     onClick={() => toggleFavorite(student.ownerId)}

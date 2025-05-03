@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import "../styles/student_profile_style.css";
-import {jwtDecode} from "jwt-decode";
-import Header from "../components/Header";
-import ProfileInput from "../components/ProfileInput";
-import AboutUsTextArea from "../components/AboutUsTextArea";
+import "../../styles/student_profile_style.css";
+import Header from "../../components/Header";
+import ProfileInput from "../../components/ProfileInput";
+import AboutUsTextArea from "../../components/AboutUsTextArea";
+import {getIdFromToken, getRoleFromToken} from "../../utils/jwtDecode";
+import {fetchStudent, fetchUniversity, updateStudentProfile} from "../../services/apiService";
 
 const StudentProfile = () => {
 
-    const baseUrl = "http://localhost:8080";
+    const userId = getIdFromToken();
+    const userRole = getRoleFromToken();
 
-    const token = localStorage.getItem("authToken");
-    const decodedToken = jwtDecode(token);
-
-    const [university, setUniversity] = useState([])
+    const [university, setUniversity] = useState("")
     const [profile, setProfile] = useState({
         ownerId: "",
         firstName: "",
@@ -24,33 +23,35 @@ const StudentProfile = () => {
         gpa: "",
         currentYear: "",
         yearOfEnrollment: "",
+        aboutUs: "",
     });
 
     const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
-        fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => {
 
-                setProfile(data);
-                return fetch(`${baseUrl}/university/${data.universityId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
-            })
-            .then((response) => response.json())
-            .then((data) => setUniversity(data))
-            .catch((error) => console.error("Error fetching data:", error));
+        fetchStudent(userId).then((data) => {
+            setProfile({
+                ownerId: data.ownerId || "",
+                firstName: data.firstName|| "",
+                lastName: data.lastName || "",
+                email: data.email || "",
+                phoneNumber: data.phoneNumber || "",
+                universityId: data.universityId || "",
+                degree: data.degree || "",
+                gpa: data.gpa || "",
+                currentYear: data.currentYear || "",
+                yearOfEnrollment: data.yearOfEnrollment || "",
+                aboutUs: data.aboutUs || "",
+            });
+            fetchUniversity(data.universityId)
+                .then((data1) => {
+                    setUniversity(data1.name);
+                })
+                .catch((error) => console.error("Error fetching data:", error));
+        });
+
+
     }, []);
 
 
@@ -66,23 +67,16 @@ const StudentProfile = () => {
 
     const handleSave = () => {
         console.log(profile);
-        fetch(`${baseUrl}/student/${decodedToken['user-id']}`, {
-            method: "PUT",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(profile),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    alert("Profile saved successfully!");
-                    setIsEditing(false);
-                } else {
-                    alert("Error saving profile.");
-                }
-            })
-            .catch((error) => console.error("Error saving profile:", error));
+
+        const result = updateStudentProfile(profile);
+
+        if (result) {
+            alert("Profile saved successfully!");
+            setIsEditing(false);
+        } else {
+            alert("Error saving profile.");
+        }
+
     };
 
     return (
@@ -128,7 +122,7 @@ const StudentProfile = () => {
                         type="text"
                         name="universityName"
                         placeholder="University Name"
-                        value={university.name}
+                        value={university}
                         handleChange={handleChange}
                     />
                 </div>
@@ -172,20 +166,6 @@ const StudentProfile = () => {
                         handleChange={handleChange}
                         isEditing={isEditing}
                     />
-                    {/*<div className="input-container">*/}
-                    {/*    <label>GPA</label>*/}
-                    {/*    <input*/}
-                    {/*        type="number"*/}
-                    {/*        name="gpa"*/}
-                    {/*        placeholder="GPA"*/}
-                    {/*        value={profile.gpa}*/}
-                    {/*        onChange={handleChange}*/}
-                    {/*        step="0.01"*/}
-                    {/*        min="0.0"*/}
-                    {/*        max="4.0"*/}
-                    {/*        disabled={!isEditing}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
 
                     <ProfileInput
                         title={"Year of Enrollment"}
@@ -200,7 +180,7 @@ const StudentProfile = () => {
 
 
                 <AboutUsTextArea
-                    profile={profile}
+                    value={profile.aboutUs}
                     handleChange={handleChange}
                     isEditing={isEditing}
                 />

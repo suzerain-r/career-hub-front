@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import '../styles/auth_style.css';
+import '../../styles/auth_style.css';
 import { useNavigate } from "react-router-dom";
-import AuthFonImage from "../components/AuthFonImage";
-import AuthInput from "../components/AuthInput";
-import AuthHeader from "../components/AuthHeader";
+import AuthFonImage from "../../components/AuthFonImage";
+import AuthInput from "../../components/AuthInput";
+import AuthHeader from "../../components/AuthHeader";
 
 const ForgotPassword = () => {
 
-    const baseUrl = "http://localhost:8080";
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [message, setMessage] = useState('');
@@ -16,48 +15,11 @@ const ForgotPassword = () => {
     const handleForgotPassword = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch('${baseUrl}/?', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                setMessage('You have sent to your email confirmation code!!!');
-            } else {
-                setMessage(data.message || 'Failed to send reset email');
-            }
-        } catch (error) {
-            setMessage('Error sending email. Please try again later.');
-            console.error('Error:', error);
-        }
     };
 
     const handleVerifyCode = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(`${baseUrl}/?`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, code }),
-            });
 
-            const data = await response.json();
-            if (response.ok) {
-                navigate('/reset-password');
-            } else {
-                setMessage(data.message || 'Invalid code. Please try again.');
-            }
-        } catch (error) {
-            setMessage('Error verifying code. Please try again later.');
-            console.error('Error:', error);
-        }
     };
 
     return (

@@ -1,36 +1,17 @@
 import React, { useState } from 'react';
-import '../styles/auth_style.css';
-import AuthInput from "../components/AuthInput";
-import AuthHeader from "../components/AuthHeader";
-import AuthFonImage from "../components/AuthFonImage";
+import '../../styles/auth_style.css';
+import AuthInput from "../../components/AuthInput";
+import AuthHeader from "../../components/AuthHeader";
+import AuthFonImage from "../../components/AuthFonImage";
 
 const ResetPassword = () => {
 
-    const baseUrl = "http://localhost:8080";
     const [pass, setPass] = useState('');
     const [rePass, setRePass] = useState('');
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch(`${baseUrl}/?`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({  }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-
-            } else {
-
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
     };
 
     return (

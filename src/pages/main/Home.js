@@ -1,22 +1,26 @@
-import '../styles/home_style.css';
-import howWorkInfo from '../assets/how-work-info.svg';
-import mainInfo from '../assets/main-info.svg';
-import universityIcon from '../assets/university-icon.svg';
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import '../../styles/home_style.css';
+import '../../styles/modal.css';
+import howWorkInfo from '../../assets/how-work-info.svg';
+import mainInfo from '../../assets/main-info.svg';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import React, {useEffect, useState} from "react";
-import websiteIcon from "../assets/website-icon.svg";
-import locationIcon from "../assets/modal-location-icon.svg";
-import phoneIcon from "../assets/phone-icon.svg";
-import emailIcon from "../assets/email-icon.svg";
-import HomeCount from "../components/HomeCount";
-import HomeUniversityCardList from "../components/HomeUniversityCardList";
+import candidateIcon from '../../assets/candidate-icon.svg';
+import universityIcon from '../../assets/university-icon.svg';
+import companyIcon from '../../assets/company-icon.svg';
+import websiteIcon from "../../assets/website-icon.svg";
+import locationIcon from "../../assets/modal-location-icon.svg";
+import phoneIcon from "../../assets/phone-icon.svg";
+import emailIcon from "../../assets/email-icon.svg";
+import HomeCount from "../../components/HomeCount";
+import HomeUniversityCardList from "../../components/HomeUniversityCardList";
+import homeService, {fetchUniversities} from "../../services/apiService";
+import {getIdFromToken, getRoleFromToken} from "../../utils/jwtDecode";
 
 const Home = () => {
 
-    const baseUrl = "http://localhost:8080";
-
-    const token = localStorage.getItem("authToken");
+    const userId = getIdFromToken();
+    const userRole = getRoleFromToken();
 
     const [countStudents, setCountStudents] = useState('');
     const [countUniversities, setCountUniversities] = useState('');
@@ -28,92 +32,23 @@ const Home = () => {
 
     const handleCount =  () => {
 
-        fetch(`${baseUrl}/student/search`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setCountStudents(data['totalElements'])
-            })
-            .catch((error) => console.error("Error fetching students:", error));
+        homeService.getStudentsCount().then((data) => {setCountStudents(data['totalElements']);});
 
+        homeService.getCompaniesCount().then((data) => {setCountCompanies(data['totalElements']);});
 
-        fetch(`${baseUrl}/company/search`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setCountCompanies(data['totalElements'])
-            })
-            .catch((error) => console.error("Error fetching companies:", error));
     }
 
     const handleUniversities = () => {
-        fetch(`${baseUrl}/university/search`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data['content']);
-                fetchAverageRatings(data['content']).then();
-                setCountUniversities(data['totalElements']);
-            })
-            .catch((error) => {
-                console.error("Error fetching universities:", error);
+        fetchUniversities().then((data) => {
+            homeService.getAverageRatingsForUniversities(data['content']).then((universitiesWithRatings) => {
+                setUniversities(universitiesWithRatings.slice(0, 6));
             });
+            setCountUniversities(data['totalElements']);
+        });
     }
 
 
-    const fetchAverageRatings = async (universityList) => {
-        try {
-            const promises = universityList.map((university) =>
-                fetch(`${baseUrl}/review/getAverageRating/${university.ownerId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                }).then((response) => response.json().then((data) => ({ id: university.ownerId, averageRating: data?.averageRating || 0 })))
-            );
 
-            const ratings = await Promise.all(promises);
-            console.log(ratings);
-
-            const ratingsMap = ratings.reduce((map, rating) => {
-                map[rating.id] = rating.averageRating;
-                return map;
-            }, {});
-
-            const universitiesWithRatings = universityList.map((university) => ({
-                ...university,
-                averageRating: ratingsMap[university.ownerId] || 0,
-            }));
-            console.log(universitiesWithRatings);
-
-            const topUniversities = universitiesWithRatings
-                .sort((a, b) => b.averageRating - a.averageRating)
-                .slice(0, 6);
-
-            console.log("Top universities:", topUniversities);
-
-            setUniversities(topUniversities);
-        } catch (error) {
-            console.error("Error fetching ratings:", error);
-        }
-    };
 
     useEffect(() => {
         handleCount();
@@ -142,13 +77,19 @@ const Home = () => {
                     </div>
                     <div className="count_container">
                         <HomeCount
-                            count={countCompanies}
-                        />
-                        <HomeCount
-                            count={countUniversities}
-                        />
-                        <HomeCount
+                            logo={candidateIcon}
                             count={countStudents}
+                            type={'Candidates'}
+                        />
+                        <HomeCount
+                            logo={universityIcon}
+                            count={countUniversities}
+                            type={'Universities'}
+                        />
+                        <HomeCount
+                            logo={companyIcon}
+                            count={countCompanies}
+                            type={'Companies'}
                         />
                     </div>
 
@@ -173,9 +114,9 @@ const Home = () => {
             {selectedUniversity && (
 
 
-                <div className="university-modal-overlay" onClick={closeModal}>
-                    <div className="university-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="university-modal-close" onClick={closeModal}>×</button>
+                <div className="modal-overlay" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={closeModal}>×</button>
                         <div className="modal-header">
                             <img
                                 src={universityIcon}

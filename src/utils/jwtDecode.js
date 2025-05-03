@@ -1,6 +1,8 @@
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
-export const decodeToken = (token) => {
+const token = localStorage.getItem("authToken");
+
+export const decodeToken = () => {
     try {
         return jwtDecode(token);
     } catch (error) {
@@ -9,7 +11,12 @@ export const decodeToken = (token) => {
     }
 };
 
-export const getRoleFromToken = (token) => {
+export const getRoleFromToken = () => {
     const decoded = decodeToken(token);
-    return decoded ? decoded['user-role'] : null;
+    return decoded['user-role'];
+};
+
+export const getIdFromToken = () => {
+    const decoded = decodeToken(token);
+    return decoded['user-id'];
 };
