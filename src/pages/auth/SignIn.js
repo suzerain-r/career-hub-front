@@ -19,7 +19,7 @@ const SignIn = () => {
         const result = await login(username, password);
 
         if (result.success) {
-            const role = getRoleFromToken();
+            const role = getRoleFromToken().toUpperCase();
             if (role === 'ADMIN') {
                 navigate('/admin');
             } else {

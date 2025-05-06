@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as ProfileIcon } from '../assets/profile.svg';
 import logo from '../assets/logo.svg';
 import {jwtDecode} from "jwt-decode";
+import {getRoleFromToken} from "../utils/jwtDecode";
 
 const Header = () => {
 
@@ -17,8 +18,7 @@ const Header = () => {
     useEffect(() => {
         if (token) {
             try {
-                const decodedToken = jwtDecode(token);
-                setUserRole(decodedToken['user-role']);
+                setUserRole(getRoleFromToken().toUpperCase());
                 setIsAuthenticated(true);
             } catch (error) {
                 console.error("Error decoding token:", error);
