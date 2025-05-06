@@ -3,7 +3,6 @@ import '../styles/header.css';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as ProfileIcon } from '../assets/profile.svg';
 import logo from '../assets/logo.svg';
-import {jwtDecode} from "jwt-decode";
 import {getRoleFromToken} from "../utils/jwtDecode";
 
 const Header = () => {
@@ -38,8 +37,10 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.removeItem('authToken');
         setIsAuthenticated(false);
-        setUserRole(null); // Reset the user role on logout
+        setUserRole(null);
         navigate('/');
+        console.log(localStorage.getItem("authToken"));
+        console.log(userRole);
     };
 
     const handleProfileRedirect = () => {

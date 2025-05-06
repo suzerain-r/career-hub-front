@@ -15,12 +15,8 @@ import emailIcon from "../../assets/email-icon.svg";
 import HomeCount from "../../components/HomeCount";
 import HomeUniversityCardList from "../../components/HomeUniversityCardList";
 import homeService, {fetchUniversities} from "../../services/apiService";
-import {getIdFromToken, getRoleFromToken} from "../../utils/jwtDecode";
 
 const Home = () => {
-
-    const userId = getIdFromToken();
-    const userRole = getRoleFromToken();
 
     const [countStudents, setCountStudents] = useState('');
     const [countUniversities, setCountUniversities] = useState('');

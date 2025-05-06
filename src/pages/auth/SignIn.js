@@ -20,6 +20,7 @@ const SignIn = () => {
 
         if (result.success) {
             const role = getRoleFromToken().toUpperCase();
+            console.log(role);
             if (role === 'ADMIN') {
                 navigate('/admin');
             } else {
